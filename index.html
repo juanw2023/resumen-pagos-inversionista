@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resumen de Inversiones y Pagos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #111827;
+            --surface-dark: #1f2937;
+            --border-dark: #374151;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --text-muted: #9ca3af;
+            --brand-primary: #38bdf8;
+            --brand-secondary: #6366f1;
+            --success: #4ade80;
+            --warning: #facc15;
+            --danger: #f87171;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --radius: 12px;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Layout Principal */
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+        }
+        .content-wrapper {
+            display: flex;
+            gap: 24px;
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+        main {
+            flex: 3;
+            min-width: 0;
+        }
+        aside {
+            flex: 1;
+            position: sticky;
+            top: 40px;
+            height: calc(100vh - 80px);
+            min-width: 320px;
+        }
+
+        header {
+            background: linear-gradient(145deg, var(--surface-dark), #1a2331);
+            padding: 50px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-dark);
+        }
+        header h1 { margin: 0; font-size: 2.5rem; color: var(--text-primary); }
+        header p { margin: 10px 0 0; color: var(--text-muted); font-size: 1.1rem; }
+
+        .section-title {
+            margin: 0 0 16px;
+            color: var(--brand-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-dark);
+            padding-bottom: 8px;
+        }
+        .section-title:not(:first-child) { margin-top: 40px; }
+
+        .grid {
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* Componentes */
+        .card {
+            background: var(--surface-dark);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-dark);
+            padding: 24px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+        .card h3 { margin: 0 0 8px; font-size: 1.2rem; color: var(--text-primary); }
+        .amount { font-size: 2.2rem; font-weight: 700; color: var(--brand-primary); margin: 8px 0 12px; }
+        .meta { color: var(--text-muted); font-size: 0.95rem; margin: 4px 0; flex-grow: 1; }
+        .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .space { flex: 1 1 auto; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px;
+            border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer;
+            border: 1px solid transparent; transition: all 0.2s ease; text-decoration: none;
+        }
+        .btn-primary { 
+            background: var(--brand-primary); 
+            color: var(--bg-dark); 
+            box-shadow: 0 2px 8px rgba(56, 189, 248, 0.2);
+        }
+        .btn-primary:hover { 
+            background: #60cfff; 
+            transform: translateY(-2px);
+        }
+        .btn-primary:disabled { 
+            background: var(--border-dark); 
+            color: var(--text-muted); 
+            cursor: not-allowed; 
+            transform: none;
+            box-shadow: none;
+        }
+        .btn-secondary { background: transparent; color: var(--text-secondary); border-color: var(--border-dark); }
+        .btn-secondary:hover { background: var(--border-dark); color: var(--text-primary); }
+        .btn-success { background: var(--success); color: var(--bg-dark); }
+        .btn-success:hover { background: #22c55e; }
+
+        .pill {
+            display: inline-flex; align-items: center; gap: 6px; border-radius: 999px;
+            padding: 5px 12px; font-weight: 600; font-size: 0.8rem; text-transform: uppercase;
+        }
+        .pill.warn { background-color: rgba(250, 204, 21, 0.1); color: var(--warning); }
+        .pill.ok { background-color: rgba(74, 222, 128, 0.1); color: var(--success); }
+        .pill.danger { background-color: rgba(248, 113, 113, 0.1); color: var(--danger); }
+
+        /* Carrito de Pagos */
+        .cart-container {
+            background: var(--surface-dark);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-dark);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+        .cart-items { list-style: none; padding: 0; margin: 0; flex-grow: 1; overflow-y: auto; }
+        .cart-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid var(--border-dark); font-size: 0.95rem;
+        }
+        .cart-item-name { color: var(--text-secondary); }
+        .cart-item-price { color: var(--text-primary); font-weight: 500; }
+        .cart-total {
+            border-top: 2px solid var(--border-dark);
+            padding-top: 16px; margin-top: 16px;
+            display: flex; justify-content: space-between; align-items: baseline;
+        }
+        .cart-total-label { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); }
+        .cart-total-amount { font-size: 1.5rem; font-weight: 700; color: var(--brand-primary); }
+        #cart-empty-msg { text-align: center; color: var(--text-muted); padding: 40px 0; }
+
+        /* Cuentas Bancarias */
+        .bank-accounts {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--bg-dark);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-dark);
+        }
+        .account-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-dark);
+        }
+        .account-item:last-child { border-bottom: none; }
+        .account-info { flex-grow: 1; }
+        .account-number { font-weight: 600; color: var(--text-primary); }
+        .account-bank { font-size: 0.85rem; color: var(--text-muted); }
+        .account-actions { display: flex; gap: 8px; }
+        .btn-small { padding: 6px 12px; font-size: 0.8rem; }
+
+        /* Historial de Pagos (Acordeón) */
+        .history-accordion {
+            margin-top: 24px;
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius);
+            background: var(--bg-dark);
+        }
+        .history-header {
+            padding: 16px; cursor: pointer; display: flex;
+            justify-content: space-between; align-items: center;
+            font-weight: 600; color: var(--text-primary);
+            transition: background-color 0.2s ease;
+        }
+        .history-header:hover {
+            background-color: #2a3647;
+        }
+        .history-content { display: none; padding: 0 16px 16px; }
+        .history-item { 
+            display: flex; justify-content: space-between; 
+            padding: 8px 0; font-size: 0.9rem; 
+            border-bottom: 1px solid var(--border-dark);
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .history-item-date { color: var(--text-muted); }
+        .history-accordion.open .history-content { display: block; }
+        .history-accordion .chev { transition: transform 0.2s ease; }
+        .history-accordion.open .chev { transform: rotate(90deg); }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            place-items: center;
+            background: rgba(17, 24, 39, 0.8);
+            z-index: 50;
+            backdrop-filter: blur(5px);
+        }
+        .modal.show { display: grid; }
+        .modal-dialog {
+            width: min(900px, 92vw);
+            max-height: 88vh;
+            background: var(--surface-dark);
+            border-radius: 14px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border: 1px solid var(--border-dark);
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        .modal-body { 
+            padding: 24px; 
+            overflow-y: auto; 
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .modal-body h2 { color: var(--brand-primary); margin: 0 0 16px; }
+        .modal-body p { margin: 0 0 12px; }
+        .document-viewer {
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed var(--border-dark);
+            border-radius: var(--radius);
+            background: var(--bg-dark);
+        }
+        .document-viewer img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+        .document-viewer iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: var(--radius);
+        }
+
+        /* Iconos SVG */
+        .icon { width: 1em; height: 1em; vertical-align: -0.125em; fill: currentColor; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-wrapper { flex-direction: column; }
+            aside { position: static; height: auto; margin-top: 40px; }
+        }
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .grid { grid-template-columns: 1fr; }
+            .content-wrapper { padding: 0 16px; }
+            .row { flex-direction: column; align-items: stretch; }
+            .btn { justify-content: center; }
+        }
+
+        /* Animaciones adicionales */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .cart-item {
+            animation: slideIn 0.3s ease;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: var(--bg-dark);
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-cart" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0 0 20.01 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+        </symbol>
+        <symbol id="icon-chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+        </symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </symbol>
+        <symbol id="icon-remove" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </symbol>
+        <symbol id="icon-copy" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+        </symbol>
+        <symbol id="icon-whatsapp" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.864 3.687"/>
+        </symbol>
+        <symbol id="icon-eye" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+        </symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </symbol>
+    </svg>
+
+    <div class="main-layout">
+        <header>
+            <h1>Resumen de Inversiones y Pagos</h1>
+            <p>Un cordial saludo. A continuación, el estado de cuenta de los servicios activos.</p>
+        </header>
+
+        <div class="content-wrapper">
+            <main>
+                <h2 class="section-title">Servicios y Suscripciones</h2>
+                <section class="grid">
+                    <article class="card" data-id="do" data-name="DigitalOcean" data-amount="173.16" data-currency="USD">
+                        <div class="row">
+                            <h3>DigitalOcean</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Vencida</span>
+                        </div>
+                        <p class="amount">$173.16 USD</p>
+                        <p class="meta">Pago pendiente por la factura del periodo anterior (Agosto 2025). DigitalOcean es nuestro proveedor de infraestructura en la nube donde se aloja el sistema web que estamos implementando.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="card" data-id="g-one" data-name="Google One (AI Pro)" data-amount="73.99" data-currency="PEN">
+                        <div class="row">
+                            <h3>Google One — AI Pro</h3>
+                            <span class="space"></span>
+                            <span class="pill warn">Pago Rechazado</span>
+                        </div>
+                        <p class="amount">S/ 73.99</p>
+                        <p class="meta">Intento de cobro rechazado para la suscripción de Septiembre 2025. Agradeceríamos actualizar el método de pago.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="card" data-id="shopify" data-name="Shopify (Básico)" data-amount="50.00" data-currency="USD">
+                        <div class="row">
+                            <h3>Shopify — Plan Básico</h3>
+                            <span class="space"></span>
+                            <span class="pill ok">Activo</span>
+                        </div>
+                        <p class="amount">$50.00 USD</p>
+                        <p class="meta">Factura correspondiente a los ciclos de Septiembre y Octubre 2025.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="card" data-id="godaddy" data-name="GoDaddy (Dominio)" data-amount="357.98" data-currency="PEN">
+                        <div class="row">
+                            <h3>GoDaddy</h3>
+                            <span class="space"></span>
+                            <span class="pill warn">Pendiente</span>
+                        </div>
+                        <p class="amount">S/ 357.98</p>
+                        <p class="meta">Renovación anual del dominio principal y servicio de correo corporativo.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+                </section>
+
+                <h2 class="section-title">Facturas de Logística (GRILLO)</h2>
+                <section class="grid">
+                    <article class="card" data-id="grillo-1057" data-name="Factura Grillo E001-1057" data-amount="1210.68" data-currency="USD">
+                        <div class="row">
+                            <h3>Factura E001-1057</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">$1,210.68 USD</p>
+                        <p class="meta">Servicio de almacén correspondiente al mes de Junio 2025.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="card" data-id="grillo-1082" data-name="Factura Grillo E001-1082" data-amount="955.80" data-currency="USD">
+                        <div class="row">
+                            <h3>Factura E001-1082</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">$955.80 USD</p>
+                        <p class="meta">Servicio de almacén correspondiente al mes de Julio 2025. Incluye detracción.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="card" data-id="grillo-1108" data-name="Factura Grillo E001-1108" data-amount="955.80" data-currency="USD">
+                        <div class="row">
+                            <h3>Factura E001-1108</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">$955.80 USD</p>
+                        <p class="meta">Servicio de almacén correspondiente al mes de Agosto 2025. Incluye detracción.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+                </section>
+            </main>
+
+            <aside>
+                <div class="cart-container">
+                    <h2 class="section-title">Carrito de Pagos</h2>
+                    <ul class="cart-items" id="cart-items">
+                        <p id="cart-empty-msg">No hay pagos seleccionados.</p>
+                    </ul>
+                    <div id="cart-summary" style="display: none;">
+                        <div class="cart-total">
+                            <span class="cart-total-label">Total USD:</span>
+                            <span class="cart-total-amount" id="total-usd">$0.00</span>
+                        </div>
+                        <div class="cart-total">
+                            <span class="cart-total-label">Total PEN:</span>
+                            <span class="cart-total-amount" id="total-pen">S/ 0.00</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" id="process-payments-btn">
+                            Notificar para Procesar Pagos
+                        </button>
+                    </div>
+
+                    <!-- Cuentas Bancarias -->
+                    <div class="bank-accounts" id="bank-accounts" style="display: none;">
+                        <h3 style="margin: 0 0 16px; color: var(--text-primary); font-size: 1.1rem;">Cuentas para Transferencia</h3>
+                        <div id="account-list"></div>
+                    </div>
+
+                    <div class="history-accordion" id="history-accordion">
+                        <div class="history-header">
+                            <span>Historial de Pagos</span>
+                            <svg class="icon chev"><use href="#icon-chevron"></use></svg>
+                        </div>
+                        <div class="history-content">
+                            <div class="history-item">
+                                <span>Factura Grillo (Mayo)</span>
+                                <span class="history-item-date">15/06/2025</span>
+                            </div>
+                            <div class="history-item">
+                                <span>Shopify (Jul-Ago)</span>
+                                <span class="history-item-date">22/08/2025</span>
+                            </div>
+                            <div class="history-item">
+                                <span>DigitalOcean (Julio)</span>
+                                <span class="history-item-date">05/08/2025</span>
+                            </div>
+                            <div class="history-item">
+                                <span>Google One (Agosto)</span>
+                                <span class="history-item-date">01/09/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Modal para Ver Detalle -->
+    <div id="detail-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-header">
+                <strong id="detail-modal-title">Detalle</strong>
+                <span class="space"></span>
+                <button class="btn btn-secondary" id="detail-modal-close">
+                    <svg class="icon"><use href="#icon-close"></use></svg>
+                </button>
+            </div>
+            <div class="modal-body" id="detail-modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Toast para notificaciones -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Cargar datos de cuentas bancarias
+        let bankData = {};
+        try {
+            const response = await fetch('./cuentas_bancarias.json');
+            bankData = await response.json();
+        } catch (error) {
+            console.error('Error cargando datos bancarios:', error);
+        }
+
+        const cart = {
+            items: [],
+            totals: {
+                USD: 0,
+                PEN: 0
+            }
+        };
+
+        const cartItemsEl = document.getElementById('cart-items');
+        const cartEmptyMsgEl = document.getElementById('cart-empty-msg');
+        const cartSummaryEl = document.getElementById('cart-summary');
+        const totalUsdEl = document.getElementById('total-usd');
+        const totalPenEl = document.getElementById('total-pen');
+        const processPaymentsBtn = document.getElementById('process-payments-btn');
+        const bankAccountsEl = document.getElementById('bank-accounts');
+        const accountListEl = document.getElementById('account-list');
+
+        // Funciones de utilidad
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('¡Copiado al portapapeles!');
+            }).catch(() => {
+                showToast('Error al copiar');
+            });
+        }
+
+        function shareWhatsApp(text) {
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function updateBankAccounts() {
+            if (cart.items.length === 0) {
+                bankAccountsEl.style.display = 'none';
+                return;
+            }
+
+            bankAccountsEl.style.display = 'block';
+            accountListEl.innerHTML = '';
+
+            const currencies = [...new Set(cart.items.map(item => item.currency))];
+            
+            currencies.forEach(currency => {
+                const account = bankData.cuentas?.[currency];
+                if (!account) return;
+
+                const accountDiv = document.createElement('div');
+                accountDiv.className = 'account-item';
+                accountDiv.innerHTML = `
+                    <div class="account-info">
+                        <div class="account-number">${account.numero_cuenta}</div>
+                        <div class="account-bank">${account.banco} (${account.moneda})</div>
+                    </div>
+                    <div class="account-actions">
+                        <button class="btn btn-success btn-small copy-account" data-account="${account.numero_cuenta}" data-bank="${account.banco}">
+                            <svg class="icon"><use href="#icon-copy"></use></svg>
+                        </button>
+                        <button class="btn btn-success btn-small share-whatsapp" data-account="${account.numero_cuenta}" data-bank="${account.banco}" data-currency="${currency}">
+                            <svg class="icon"><use href="#icon-whatsapp"></use></svg>
+                        </button>
+                    </div>
+                `;
+                accountListEl.appendChild(accountDiv);
+            });
+
+            // Event listeners para copiar y compartir
+            document.querySelectorAll('.copy-account').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const account = e.currentTarget.dataset.account;
+                    copyToClipboard(account);
+                });
+            });
+
+            document.querySelectorAll('.share-whatsapp').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const account = e.currentTarget.dataset.account;
+                    const bank = e.currentTarget.dataset.bank;
+                    const currency = e.currentTarget.dataset.currency;
+                    const total = cart.totals[currency].toFixed(2);
+                    const symbol = currency === 'USD' ? '$' : 'S/';
+                    
+                    const message = `Hola, necesito realizar una transferencia:\n\n` +
+                                  `💰 Monto: ${symbol}${total} ${currency}\n` +
+                                  `🏦 Banco: ${bank}\n` +
+                                  `📋 Cuenta: ${account}\n\n` +
+                                  `Gracias.`;
+                    
+                    shareWhatsApp(message);
+                });
+            });
+        }
+
+        function updateCartView() {
+            cartItemsEl.innerHTML = '';
+            if (cart.items.length === 0) {
+                cartItemsEl.appendChild(cartEmptyMsgEl);
+                cartEmptyMsgEl.style.display = 'block';
+                cartSummaryEl.style.display = 'none';
+            } else {
+                cartEmptyMsgEl.style.display = 'none';
+                cartSummaryEl.style.display = 'block';
+
+                cart.items.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'cart-item';
+                    li.innerHTML = `
+                        <span class="cart-item-name">${item.name}</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="cart-item-price">${item.currency === 'USD' ? '$' : 'S/'}${parseFloat(item.amount).toFixed(2)}</span>
+                            <button class="btn-remove" data-index="${index}" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 4px;">
+                                <svg class="icon" style="width: 16px; height: 16px;"><use href="#icon-remove"></use></svg>
+                            </button>
+                        </div>
+                    `;
+                    cartItemsEl.appendChild(li);
+                });
+
+                document.querySelectorAll('.btn-remove').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = parseInt(e.currentTarget.dataset.index);
+                        removeFromCart(index);
+                    });
+                });
+            }
+
+            totalUsdEl.textContent = `$${cart.totals.USD.toFixed(2)}`;
+            totalPenEl.textContent = `S/ ${cart.totals.PEN.toFixed(2)}`;
+            
+            updateBankAccounts();
+        }
+
+        function addToCart(item) {
+            cart.items.push(item);
+            cart.totals[item.currency] += parseFloat(item.amount);
+            updateCartView();
+        }
+
+        function removeFromCart(index) {
+            const item = cart.items[index];
+            cart.totals[item.currency] -= parseFloat(item.amount);
+            cart.items.splice(index, 1);
+            
+            const card = document.querySelector(`[data-id="${item.id}"]`);
+            if (card) {
+                const button = card.querySelector('.add-to-cart-btn');
+                button.disabled = false;
+                button.querySelector('span').textContent = 'Añadir al Carrito';
+            }
+            
+            updateCartView();
+        }
+
+        function showDetailModal(itemId) {
+            const modal = document.getElementById('detail-modal');
+            const modalTitle = document.getElementById('detail-modal-title');
+            const modalBody = document.getElementById('detail-modal-body');
+            
+            const detail = bankData.detalles_facturas?.[itemId];
+            if (!detail) {
+                modalBody.innerHTML = '<p>No se encontraron detalles para este elemento.</p>';
+                modalTitle.textContent = 'Detalle no disponible';
+                modal.classList.add('show');
+                return;
+            }
+
+            modalTitle.textContent = detail.nombre;
+            
+            let content = `<h2>${detail.nombre}</h2>`;
+            if (detail.descripcion) {
+                content += `<p>${detail.descripcion}</p>`;
+            }
+
+            if (detail.screenshot) {
+                content += `
+                    <div class="document-viewer">
+                        <h3>Captura de Pantalla</h3>
+                        <img src="${detail.screenshot}" alt="Screenshot de ${detail.nombre}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <p style="display: none; color: var(--text-muted);">Imagen no disponible: ${detail.screenshot}</p>
+                    </div>
+                `;
+            }
+
+            if (detail.factura_pdf) {
+                content += `
+                    <div class="document-viewer">
+                        <h3>Factura PDF</h3>
+                        <iframe src="${detail.factura_pdf}" title="Factura PDF de ${detail.nombre}"></iframe>
+                        <p><a href="${detail.factura_pdf}" target="_blank" class="btn btn-primary">Abrir PDF en nueva ventana</a></p>
+                    </div>
+                `;
+            }
+
+            modalBody.innerHTML = content;
+            modal.classList.add('show');
+        }
+
+        // Event listeners
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const card = e.currentTarget.closest('.card');
+                const item = {
+                    id: card.dataset.id,
+                    name: card.dataset.name,
+                    amount: card.dataset.amount,
+                    currency: card.dataset.currency
+                };
+                
+                addToCart(item);
+                
+                e.currentTarget.disabled = true;
+                e.currentTarget.querySelector('span').textContent = 'Añadido';
+            });
+        });
+
+        document.querySelectorAll('.view-detail-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const card = e.currentTarget.closest('.card');
+                const itemId = card.dataset.id;
+                showDetailModal(itemId);
+            });
+        });
+
+        processPaymentsBtn.addEventListener('click', () => {
+            if (cart.items.length > 0) {
+                alert(`Se ha enviado la notificación para procesar ${cart.items.length} pago(s):\n\n` +
+                      `Total USD: $${cart.totals.USD.toFixed(2)}\n` +
+                      `Total PEN: S/ ${cart.totals.PEN.toFixed(2)}\n\n` +
+                      `El inversionista será contactado para completar los pagos seleccionados.`);
+            }
+        });
+
+        // Modal controls
+        document.getElementById('detail-modal-close').addEventListener('click', () => {
+            document.getElementById('detail-modal').classList.remove('show');
+        });
+
+        document.getElementById('detail-modal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                e.currentTarget.classList.remove('show');
+            }
+        });
+
+        // Historial accordion
+        document.getElementById('history-accordion').querySelector('.history-header').addEventListener('click', () => {
+            document.getElementById('history-accordion').classList.toggle('open');
+        });
+
+        // Inicializar
+        updateCartView();
+    });
+    </script>
+</body>
+</html>
+
