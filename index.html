@@ -318,6 +318,37 @@
         .toast.show {
             transform: translateX(0);
         }
+        /* Carrito acordeón */
+        .cart-accordion details {
+            background: transparent;
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            padding: 8px;
+        }
+        .cart-accordion summary {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .cart-accordion table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+        .cart-accordion th, .cart-accordion td {
+            padding: 8px 6px;
+            border-bottom: 1px dashed var(--border-dark);
+            text-align: left;
+            font-size: 0.95rem;
+        }
+        .cart-accordion th { color: var(--text-muted); font-weight: 600; }
+        .cart-accordion .remove-btn { background: none; border: none; color: var(--danger); cursor: pointer; }
     </style>
 </head>
 <body>
@@ -683,12 +714,24 @@
                     "factura_pdf": "assets/HARMONYFE001-108224-07-2025(1).pdf",
                     "descripcion": "Servicios de almacén y logística correspondientes al mes de Julio 2025. Incluye detracción del 10%."
                 },
-                "grillo-1108": {
-                    "nombre": "Factura Grillo E001-1108",
-                    "screenshot": null,
-                    "factura_pdf": "assets/HARMONYFE001-110824-08-2025(1).pdf",
-                    "descripcion": "Servicios de almacén y logística correspondientes al mes de Agosto 2025. Incluye detracción del 10%."
-                }
+                        "grillo-1108": {
+                            "nombre": "Factura Grillo E001-1108",
+                            "screenshot": null,
+                            "factura_pdf": "assets/HARMONYFE001-110824-08-2025(1).pdf",
+                            "descripcion": "Servicios de almacén y logística correspondientes al mes de Agosto 2025. Incluye detracción del 10%."
+                        },
+                        "mantenimiento-usd": {
+                            "nombre": "Mantenimiento - Cuenta Dólares",
+                            "screenshot": "assets/factura_cuenta_corriente_dolares.jpg",
+                            "factura_pdf": null,
+                            "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en dólares. Importe: $15.00"
+                        },
+                        "mantenimiento-pen": {
+                            "nombre": "Mantenimiento - Cuenta Soles",
+                            "screenshot": "assets/factura_cuenta_corriente_soles.jpg",
+                            "factura_pdf": null,
+                            "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en soles. Importe: S/10.00"
+                        }
             }
         }
         </script>
@@ -833,22 +876,48 @@
                 cartEmptyMsgEl.style.display = 'none';
                 cartSummaryEl.style.display = 'block';
 
-                cart.items.forEach((item, index) => {
-                    const li = document.createElement('li');
-                    li.className = 'cart-item';
-                    li.innerHTML = `
-                        <span class="cart-item-name">${item.name}</span>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="cart-item-price">${item.currency === 'USD' ? '$' : 'S/'}${parseFloat(item.amount).toFixed(2)}</span>
-                            <button class="btn-remove" data-index="${index}" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 4px;">
-                                <svg class="icon" style="width: 16px; height: 16px;"><use href="#icon-remove"></use></svg>
-                            </button>
-                        </div>
+                // Agrupar por moneda
+                const byCurrency = cart.items.reduce((acc, item, idx) => {
+                    (acc[item.currency] = acc[item.currency] || []).push(Object.assign({index: idx}, item));
+                    return acc;
+                }, {});
+
+                const accordionDiv = document.createElement('div');
+                accordionDiv.className = 'cart-accordion';
+
+                Object.keys(byCurrency).forEach(currency => {
+                    const group = byCurrency[currency];
+                    const details = document.createElement('details');
+                    const summary = document.createElement('summary');
+                    const symbol = currency === 'USD' ? '$' : 'S/';
+                    summary.innerHTML = `${currency} — Total: ${symbol}${cart.totals[currency].toFixed(2)}`;
+
+                    const table = document.createElement('table');
+                    table.innerHTML = `
+                        <thead><tr><th>Concepto</th><th>Monto</th><th></th></tr></thead>
+                        <tbody></tbody>
                     `;
-                    cartItemsEl.appendChild(li);
+
+                    const tbody = table.querySelector('tbody');
+                    group.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${item.name}</td>
+                            <td>${symbol}${parseFloat(item.amount).toFixed(2)}</td>
+                            <td><button class="remove-btn" data-index="${item.index}"><svg class="icon" style="width:16px;height:16px;"><use href="#icon-remove"></use></svg></button></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+
+                    details.appendChild(summary);
+                    details.appendChild(table);
+                    accordionDiv.appendChild(details);
                 });
 
-                document.querySelectorAll('.btn-remove').forEach(btn => {
+                cartItemsEl.appendChild(accordionDiv);
+
+                // Delegación de eventos para botones eliminar
+                accordionDiv.querySelectorAll('.remove-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const index = parseInt(e.currentTarget.dataset.index);
                         removeFromCart(index);

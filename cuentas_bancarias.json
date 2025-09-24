@@ -72,13 +72,13 @@
     ,
     "mantenimiento-usd": {
       "nombre": "Mantenimiento - Cuenta Dólares",
-      "screenshot": null,
+      "screenshot": "assets/factura_cuenta_corriente_dolares.jpg",
       "factura_pdf": null,
       "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en dólares. Importe: $15.00"
     },
     "mantenimiento-pen": {
       "nombre": "Mantenimiento - Cuenta Soles",
-      "screenshot": null,
+      "screenshot": "assets/factura_cuenta_corriente_soles.jpg" ,
       "factura_pdf": null,
       "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en soles. Importe: S/10.00"
     }
