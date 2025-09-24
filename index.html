@@ -232,6 +232,8 @@
         .btn-secondary:hover { background: var(--border-dark); color: var(--text-primary); }
         .btn-success { background: var(--success); color: var(--bg-dark); }
         .btn-success:hover { background: #22c55e; }
+        .btn-danger { background: var(--danger); color: white; border: none; }
+        .btn-danger:hover { background: #dc2626; transform: translateY(-1px); }
         .btn-small { 
             padding: 6px 10px; 
             font-size: 0.8rem; 
@@ -412,6 +414,11 @@
             flex: 1;
             min-width: 80px;
         }
+        
+        /* Botones del carrito */
+        .cart-buttons {
+            margin-top: 20px;
+        }
 
         /* Modal */
         .modal {
@@ -501,7 +508,7 @@
         /* Toast notifications */
         .toast {
             position: fixed;
-            top: 20px;
+            top: 80px; /* Debajo del navbar */
             right: 20px;
             background: var(--success);
             color: var(--bg-dark);
@@ -511,9 +518,27 @@
             z-index: 1000;
             transform: translateX(100%);
             transition: transform 0.3s ease;
+            max-width: 300px;
+            font-size: 0.9rem;
         }
         .toast.show {
             transform: translateX(0);
+        }
+        .toast.success {
+            background: var(--success);
+            color: var(--bg-dark);
+        }
+        .toast.warning {
+            background: var(--warning);
+            color: var(--bg-dark);
+        }
+        .toast.danger {
+            background: var(--danger);
+            color: white;
+        }
+        .toast.info {
+            background: var(--brand-primary);
+            color: var(--bg-dark);
         }
         /* Carrito acordeón */
         .cart-accordion details {
@@ -879,9 +904,15 @@
                             <span class="cart-total-label">Total PEN:</span>
                             <span class="cart-total-amount" id="total-pen">S/ 0.00</span>
                         </div>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" id="process-payments-btn">
-                            Agregar todos al Carrito
-                        </button>
+                        <div class="cart-buttons">
+                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" id="process-payments-btn">
+                                Agregar todos al Carrito
+                            </button>
+                            <button class="btn btn-danger" style="width: 100%;" id="clear-cart-btn">
+                                <svg class="icon" style="width: 16px; height: 16px;"><use href="#icon-remove"></use></svg>
+                                Borrar Todo el Carrito
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Cuentas Bancarias -->
@@ -914,15 +945,15 @@
                                     </div>
                                 </div>
                                 <div class="account-actions">
-                                    <button class="btn btn-primary btn-small" onclick="copyBcpAccount('1927120357106', 'Dólares')" title="Copiar número de cuenta">
+                                    <button class="btn btn-primary btn-small bcp-copy-account" data-account="1927120357106" data-currency="Dólares" title="Copiar número de cuenta">
                                         <svg class="icon"><use href="#icon-copy"></use></svg>
                                         Copiar N°
                                     </button>
-                                    <button class="btn btn-primary btn-small" onclick="copyBcpCci('00219200712035710633', 'Dólares')" title="Copiar CCI">
+                                    <button class="btn btn-primary btn-small bcp-copy-cci" data-cci="00219200712035710633" data-currency="Dólares" title="Copiar CCI">
                                         <svg class="icon"><use href="#icon-copy"></use></svg>
                                         Copiar CCI
                                     </button>
-                                    <button class="btn btn-success btn-small" onclick="shareBcpWhatsApp('1927120357106', '00219200712035710633', 'Dólares')" title="Compartir por WhatsApp">
+                                    <button class="btn btn-success btn-small bcp-share-whatsapp" data-account="1927120357106" data-cci="00219200712035710633" data-currency="Dólares" title="Compartir por WhatsApp">
                                         <svg class="icon"><use href="#icon-whatsapp"></use></svg>
                                         WhatsApp
                                     </button>
@@ -946,15 +977,15 @@
                                     </div>
                                 </div>
                                 <div class="account-actions">
-                                    <button class="btn btn-primary btn-small" onclick="copyBcpAccount('1912627708003', 'Soles')" title="Copiar número de cuenta">
+                                    <button class="btn btn-primary btn-small bcp-copy-account" data-account="1912627708003" data-currency="Soles" title="Copiar número de cuenta">
                                         <svg class="icon"><use href="#icon-copy"></use></svg>
                                         Copiar N°
                                     </button>
-                                    <button class="btn btn-primary btn-small" onclick="copyBcpCci('00219100262770800357', 'Soles')" title="Copiar CCI">
+                                    <button class="btn btn-primary btn-small bcp-copy-cci" data-cci="00219100262770800357" data-currency="Soles" title="Copiar CCI">
                                         <svg class="icon"><use href="#icon-copy"></use></svg>
                                         Copiar CCI
                                     </button>
-                                    <button class="btn btn-success btn-small" onclick="shareBcpWhatsApp('1912627708003', '00219100262770800357', 'Soles')" title="Compartir por WhatsApp">
+                                    <button class="btn btn-success btn-small bcp-share-whatsapp" data-account="1912627708003" data-cci="00219100262770800357" data-currency="Soles" title="Compartir por WhatsApp">
                                         <svg class="icon"><use href="#icon-whatsapp"></use></svg>
                                         WhatsApp
                                     </button>
@@ -1147,11 +1178,38 @@
         }
 
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('¡Copiado al portapapeles!');
-            }).catch(() => {
-                showToast('Error al copiar');
-            });
+            // Método moderno con navigator.clipboard
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    console.log('Copiado exitosamente:', text);
+                }).catch(err => {
+                    console.error('Error al copiar con clipboard API:', err);
+                    fallbackCopyToClipboard(text);
+                });
+            } else {
+                // Fallback para navegadores más antiguos o contextos no seguros
+                fallbackCopyToClipboard(text);
+            }
+        }
+
+        function fallbackCopyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                console.log('Fallback copy result:', successful, 'Text:', text);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            } finally {
+                document.body.removeChild(textArea);
+            }
         }
 
         function shareWhatsApp(text) {
@@ -1161,13 +1219,15 @@
 
         // Funciones para cuentas BCP
         function copyBcpAccount(accountNumber, currency) {
+            console.log('Intentando copiar número de cuenta:', accountNumber, 'Currency:', currency);
             copyToClipboard(accountNumber);
-            showToast(`✅ Número de cuenta ${currency} copiado`, 'success');
+            showToast(`✅ Número de cuenta ${currency} copiado: ${accountNumber}`, 'success');
         }
 
         function copyBcpCci(cci, currency) {
+            console.log('Intentando copiar CCI:', cci, 'Currency:', currency);
             copyToClipboard(cci);
-            showToast(`✅ CCI ${currency} copiado`, 'success');
+            showToast(`✅ CCI ${currency} copiado: ${cci}`, 'success');
         }
 
         function shareBcpWhatsApp(accountNumber, cci, currency) {
@@ -1425,6 +1485,39 @@
             updateCartView();
         }
 
+        function clearCart() {
+            if (cart.items.length === 0) {
+                showToast('El carrito ya está vacío', 'info');
+                return;
+            }
+
+            // Confirmar con el usuario
+            if (confirm('¿Estás seguro de que quieres borrar todos los elementos del carrito?')) {
+                const itemCount = cart.items.length;
+                
+                // Rehabilitar todos los botones
+                cart.items.forEach(item => {
+                    const card = document.querySelector(`[data-id="${item.id}"]`);
+                    if (card) {
+                        const button = card.querySelector('.add-to-cart-btn');
+                        if (button) {
+                            button.disabled = false;
+                            const span = button.querySelector('span');
+                            if (span) span.textContent = 'Añadir al Carrito';
+                        }
+                    }
+                });
+
+                // Limpiar carrito
+                cart.items = [];
+                cart.totals.USD = 0;
+                cart.totals.PEN = 0;
+                
+                updateCartView();
+                showToast(`🗑️ Carrito vaciado (${itemCount} elemento${itemCount > 1 ? 's' : ''} eliminado${itemCount > 1 ? 's' : ''})`, 'success');
+            }
+        }
+
         function showDetailModal(itemId) {
             console.log('showDetailModal itemId:', itemId, 'detail:', bankData.detalles_facturas && bankData.detalles_facturas[itemId]);
             const modal = document.getElementById('detail-modal');
@@ -1552,14 +1645,8 @@
                 
                 // Desplazar automáticamente al carrito después de un breve delay
                 setTimeout(() => {
-                    const cartSection = document.querySelector('.cart-container');
-                    if (cartSection) {
-                        cartSection.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'start' 
-                        });
-                    }
-                }, 500);
+                    scrollToCart();
+                }, 300);
             } else {
                 showToast('ℹ️ Todos los pagos ya están en el carrito', 'info');
             }
@@ -1568,10 +1655,40 @@
             console.log('Items en carrito:', cart.items.length); // Debug
         }
 
-        // Event listener para el botón "Agregar Todos" del navbar
-        document.getElementById('navbar-add-all-btn').addEventListener('click', addAllToCart);
+        // Función para hacer scroll al carrito
+        function scrollToCart() {
+            const cartSection = document.querySelector('.cart-container');
+            if (cartSection) {
+                // En dispositivos móviles, scroll al top de la página primero
+                if (window.innerWidth <= 768) {
+                    window.scrollTo({ 
+                        top: 0, 
+                        behavior: 'smooth' 
+                    });
+                } else {
+                    // En desktop, scroll al carrito
+                    cartSection.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start',
+                        inline: 'nearest'
+                    });
+                }
+            }
+        }
+
+        // Event listeners
+        document.getElementById('navbar-add-all-btn').addEventListener('click', () => {
+            const initialCartLength = cart.items.length;
+            addAllToCart();
+            // Si se agregaron items, hacer scroll inmediatamente
+            if (cart.items.length > initialCartLength) {
+                setTimeout(scrollToCart, 200);
+            }
+        });
 
         processPaymentsBtn.addEventListener('click', addAllToCart);
+
+        document.getElementById('clear-cart-btn').addEventListener('click', clearCart);
 
         // Modal controls
         document.getElementById('detail-modal-close').addEventListener('click', () => {
@@ -1582,6 +1699,32 @@
             if (e.target === e.currentTarget) {
                 e.currentTarget.classList.remove('show');
             }
+        });
+
+        // Event listeners para botones BCP
+        document.querySelectorAll('.bcp-copy-account').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const accountNumber = e.currentTarget.dataset.account;
+                const currency = e.currentTarget.dataset.currency;
+                copyBcpAccount(accountNumber, currency);
+            });
+        });
+
+        document.querySelectorAll('.bcp-copy-cci').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const cci = e.currentTarget.dataset.cci;
+                const currency = e.currentTarget.dataset.currency;
+                copyBcpCci(cci, currency);
+            });
+        });
+
+        document.querySelectorAll('.bcp-share-whatsapp').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const accountNumber = e.currentTarget.dataset.account;
+                const cci = e.currentTarget.dataset.cci;
+                const currency = e.currentTarget.dataset.currency;
+                shareBcpWhatsApp(accountNumber, cci, currency);
+            });
         });
 
         // Inicializar
