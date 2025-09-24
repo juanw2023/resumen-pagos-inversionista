@@ -112,34 +112,55 @@
             font-weight: 700;
         }
 
+        /* Tablet y móvil */
         @media (max-width: 768px) {
-            .navbar {
-                padding: 8px 16px;
+            .content-wrapper {
+                flex-direction: column;
+                gap: 20px;
+                padding: 0 16px;
             }
-            .navbar-brand {
-                font-size: 1.1rem;
+            
+            aside {
+                position: static;
+                height: auto;
+                min-width: auto;
+                margin-top: 0;
             }
+            
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
             .navbar-cart-info {
-                display: none; /* Ocultar info detallada en móvil */
+                font-size: 0.8rem;
             }
-            #navbar-add-all-btn {
-                padding: 8px 16px;
-                font-size: 0.85rem;
-            }
+            
             #navbar-add-all-btn span {
-                display: none; /* Solo mostrar icono en móvil muy pequeño */
+                display: none;
             }
         }
 
+        /* Móvil pequeño */
         @media (max-width: 480px) {
-            body {
-                padding-top: 60px;
+            .content-wrapper {
+                padding: 0 12px;
             }
-            .navbar {
-                padding: 6px 12px;
+            
+            header {
+                padding: 30px 20px;
             }
-            .navbar-brand {
-                font-size: 1rem;
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 16px;
+            }
+            
+            .navbar-cart-info {
+                display: none;
             }
         }
 
@@ -189,8 +210,8 @@
 
         .grid {
             display: grid;
-            gap: 24px;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         }
 
         /* Componentes */
@@ -628,21 +649,174 @@
             border-radius: var(--radius);
         }
 
+        /* Tabla resumen compacta */
+        .summary-table-container {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card {
+            background: var(--hover-color);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-card .stat-number.usd { color: var(--primary-color); }
+        .stat-card .stat-number.pen { color: var(--success); }
+        .stat-card .stat-number.count { color: var(--text-color); }
+        
+        .stat-card .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        
+        .summary-table th,
+        .summary-table td {
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .summary-table th {
+            background: var(--hover-color);
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .summary-table tbody tr:hover {
+            background: var(--hover-color);
+        }
+        
+        .summary-table .amount {
+            font-weight: 600;
+            text-align: right;
+            font-size: 0.8rem;
+        }
+        
+        .summary-table .amount.usd {
+            color: var(--primary-color);
+        }
+        
+        .summary-table .amount.pen {
+            color: var(--success);
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            background: var(--hover-color);
+            color: var(--text-muted);
+        }
+
         /* Iconos SVG */
         .icon { width: 1em; height: 1em; vertical-align: -0.125em; fill: currentColor; }
 
-        /* Responsive */
+        /* Responsive para tabla resumen */
+        @media (max-width: 768px) {
+            .summary-table-container {
+                margin: 0 0 1.5rem 0;
+            }
+            
+            .summary-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-card .stat-number {
+                font-size: 1.3rem;
+            }
+            
+            .summary-table {
+                font-size: 0.8rem;
+            }
+            
+            .summary-table th,
+            .summary-table td {
+                padding: 0.5rem 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .summary-stats {
+                gap: 0.5rem;
+            }
+            
+            .stat-card {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .stat-card .stat-number {
+                font-size: 1.1rem;
+            }
+            
+            .stat-card .stat-label {
+                font-size: 0.7rem;
+            }
+        }
+        
+        /* iPhone 14 Pro - Carrito optimizado */
+        @media (max-width: 430px) {
+            .content-wrapper { 
+                flex-direction: column;
+                gap: 16px;
+            }
+            aside { 
+                position: static; 
+                height: auto; 
+                margin-top: 20px;
+                padding: 0;
+            }
+            .cart-container {
+                padding: 16px;
+                border-radius: 12px;
+            }
+            .cart-items {
+                max-height: 300px;
+                overflow-y: auto;
+            }
+        }
+
         @media (max-width: 1024px) {
             .content-wrapper { flex-direction: column; }
             aside { position: static; height: auto; margin-top: 40px; }
         }
-        @media (max-width: 768px) {
-            header h1 { font-size: 2rem; }
-            .grid { grid-template-columns: 1fr; }
-            .content-wrapper { padding: 0 16px; }
-            .row { flex-direction: column; align-items: stretch; }
-            .btn { justify-content: center; }
-        }
+
 
         /* Animaciones adicionales */
         @keyframes slideIn {
@@ -849,6 +1023,61 @@
             <p>Un cordial saludo. A continuación, el estado de cuenta de los servicios activos.</p>
         </header>
 
+        <!-- Resumen Compacto -->
+        <section class="summary-table-container">
+            <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem;">📊 Resumen de Pagos</h3>
+            
+            <div class="summary-stats">
+                <div class="stat-card">
+                    <div class="stat-number usd">$6,305.31</div>
+                    <div class="stat-label">Total USD</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number pen">S/499.22</div>
+                    <div class="stat-label">Total PEN</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number count">17</div>
+                    <div class="stat-label">Servicios</div>
+                </div>
+            </div>
+            
+            <details open style="margin-top: 1rem;">
+                <summary style="cursor: pointer; padding: 0.5rem; background: var(--hover-color); border-radius: 6px; font-size: 0.9rem;">
+                    📋 Ver detalle por servicio
+                </summary>
+                <div style="overflow-x: auto; margin-top: 0.75rem;">
+                    <table class="summary-table">
+                        <thead>
+                            <tr>
+                                <th>Servicio</th>
+                                <th>Categoría</th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DigitalOcean</td><td><span class="category-badge">Infra</span></td><td class="amount usd">$173.16</td></tr>
+                            <tr><td>Google One</td><td><span class="category-badge">Storage</span></td><td class="amount pen">S/73.99</td></tr>
+                            <tr><td>Shopify</td><td><span class="category-badge">E-com</span></td><td class="amount usd">$50.00</td></tr>
+                            <tr><td>GoDaddy</td><td><span class="category-badge">Host</span></td><td class="amount pen">S/357.98</td></tr>
+                            <tr><td>Dinnet</td><td><span class="category-badge">Log</span></td><td class="amount usd">$2,364.00</td></tr>
+                            <tr><td>Grillo Jun</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$962.11</td></tr>
+                            <tr><td>Grillo Jul</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$955.80</td></tr>
+                            <tr><td>Grillo Ago</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$955.80</td></tr>
+                            <tr><td>E001-2778</td><td><span class="category-badge">Cont</span></td><td class="amount usd">$118.00</td></tr>
+                            <tr><td>E001-2811</td><td><span class="category-badge">Cont</span></td><td class="amount usd">$118.00</td></tr>
+                            <tr><td>E001-2842</td><td><span class="category-badge">Decl</span></td><td class="amount usd">$118.00</td></tr>
+                            <tr><td>E001-2859</td><td><span class="category-badge">Cont</span></td><td class="amount usd">$118.00</td></tr>
+                            <tr><td>E001-2913</td><td><span class="category-badge">Outs</span></td><td class="amount usd">$118.00</td></tr>
+                            <tr><td>E001-2952</td><td><span class="category-badge">Outs</span></td><td class="amount usd">$118.00</td></tr>
+                            <tr><td>Mant. USD</td><td><span class="category-badge">Banco</span></td><td class="amount usd">$16.44</td></tr>
+                            <tr><td>Mant. PEN</td><td><span class="category-badge">Banco</span></td><td class="amount pen">S/67.25</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </section>
+
         <div class="content-wrapper">
             <main>
                 <h2 class="section-title">Servicios y Suscripciones</h2>
@@ -993,14 +1222,14 @@
                             </button>
                         </div>
                     </article>
-                    <article class="card" data-id="factura-e001-2778" data-name="Servicio de Contabilidad - Febrero 2025" data-amount="118.00" data-currency="USD">
+                    <article class="card" data-id="factura-e001-2778" data-name="Factura E001-2778 - Contabilidad Febrero" data-amount="118.00" data-currency="USD">
                         <div class="row">
-                            <h3>Contabilidad Feb 2025</h3>
+                            <h3>Factura E001-2778</h3>
                             <span class="space"></span>
                             <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">$118.00 USD</p>
-                        <p class="meta">Factura E001-2778 por servicios de contabilidad del mes de febrero 2025.</p>
+                        <p class="meta">Servicios de contabilidad correspondientes al mes de febrero 2025.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
                                 <svg class="icon"><use href="#icon-cart"></use></svg>
@@ -1012,14 +1241,14 @@
                             </button>
                         </div>
                     </article>
-                    <article class="card" data-id="factura-e001-2811" data-name="Servicio de Contabilidad - Marzo 2025" data-amount="118.00" data-currency="USD">
+                    <article class="card" data-id="factura-e001-2811" data-name="Factura E001-2811 - Contabilidad Marzo" data-amount="118.00" data-currency="USD">
                         <div class="row">
-                            <h3>Contabilidad Mar 2025</h3>
+                            <h3>Factura E001-2811</h3>
                             <span class="space"></span>
                             <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">$118.00 USD</p>
-                        <p class="meta">Factura E001-2811 por servicios de contabilidad del mes de marzo 2025.</p>
+                        <p class="meta">Servicios de contabilidad correspondientes al mes de marzo 2025.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
                                 <svg class="icon"><use href="#icon-cart"></use></svg>
@@ -1031,14 +1260,14 @@
                             </button>
                         </div>
                     </article>
-                    <article class="card" data-id="factura-e001-2842" data-name="Declaración Anual - Abril 2025" data-amount="118.00" data-currency="USD">
+                    <article class="card" data-id="factura-e001-2842" data-name="Factura E001-2842 - Declaración Anual" data-amount="118.00" data-currency="USD">
                         <div class="row">
-                            <h3>Declaración Anual 2025</h3>
+                            <h3>Factura E001-2842</h3>
                             <span class="space"></span>
                             <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">$118.00 USD</p>
-                        <p class="meta">Factura E001-2842 por elaboración y presentación de declaración anual.</p>
+                        <p class="meta">Elaboración y presentación de declaración anual 2025.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
                                 <svg class="icon"><use href="#icon-cart"></use></svg>
@@ -1050,14 +1279,14 @@
                             </button>
                         </div>
                     </article>
-                    <article class="card" data-id="factura-e001-2859" data-name="Servicio de Contabilidad - Abril 2025" data-amount="118.00" data-currency="USD">
+                    <article class="card" data-id="factura-e001-2859" data-name="Factura E001-2859 - Contabilidad Abril" data-amount="118.00" data-currency="USD">
                         <div class="row">
-                            <h3>Contabilidad Abr 2025</h3>
+                            <h3>Factura E001-2859</h3>
                             <span class="space"></span>
                             <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">$118.00 USD</p>
-                        <p class="meta">Factura E001-2859 por servicios de contabilidad del mes de abril 2025.</p>
+                        <p class="meta">Servicios de contabilidad correspondientes al mes de abril 2025.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
                                 <svg class="icon"><use href="#icon-cart"></use></svg>
@@ -1069,14 +1298,14 @@
                             </button>
                         </div>
                     </article>
-                    <article class="card" data-id="factura-e001-2913" data-name="Outsourcing Contable - Mayo 2025" data-amount="118.00" data-currency="USD">
+                    <article class="card" data-id="factura-e001-2913" data-name="Factura E001-2913 - Outsourcing Mayo" data-amount="118.00" data-currency="USD">
                         <div class="row">
-                            <h3>Outsourcing May 2025</h3>
+                            <h3>Factura E001-2913</h3>
                             <span class="space"></span>
                             <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">$118.00 USD</p>
-                        <p class="meta">Factura E001-2913 por servicios de outsourcing contable del mes de mayo 2025.</p>
+                        <p class="meta">Servicios de outsourcing contable correspondientes al mes de mayo 2025.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
                                 <svg class="icon"><use href="#icon-cart"></use></svg>
@@ -1088,14 +1317,14 @@
                             </button>
                         </div>
                     </article>
-                    <article class="card" data-id="factura-e001-2952" data-name="Outsourcing Contable - Junio 2025" data-amount="118.00" data-currency="USD">
+                    <article class="card" data-id="factura-e001-2952" data-name="Factura E001-2952 - Outsourcing Junio" data-amount="118.00" data-currency="USD">
                         <div class="row">
-                            <h3>Outsourcing Jun 2025</h3>
+                            <h3>Factura E001-2952</h3>
                             <span class="space"></span>
                             <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">$118.00 USD</p>
-                        <p class="meta">Factura E001-2952 por servicios de outsourcing contable del mes de junio 2025.</p>
+                        <p class="meta">Servicios de outsourcing contable correspondientes al mes de junio 2025.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
                                 <svg class="icon"><use href="#icon-cart"></use></svg>
@@ -1872,13 +2101,18 @@
                             <button type="button" class="action-button download-document" onclick="downloadDocument('${detail.factura_pdf}', '${detail.nombre}_factura')" aria-label="Descargar" title="Descargar PDF">
                                 <svg width="20" height="20"><use href="#icon-download"></use></svg>
                             </button>
-                            <button type="button" class="action-button fullscreen-view" onclick="openPdfFullscreen('${detail.factura_pdf}', '${detail.nombre}')" aria-label="Vista completa" title="Abrir en nueva ventana">
+                            <button type="button" class="action-button fullscreen-view" onclick="openPdfFullscreen('${detail.factura_pdf}', '${detail.nombre}')" aria-label="Abrir PDF en nueva ventana" title="📄 Abrir PDF en nueva ventana">
                                 <svg width="20" height="20"><use href="#icon-external"></use></svg>
                             </button>
                         </div>
-                        <h3>Factura PDF</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3>Factura PDF</h3>
+                            <a href="${detail.factura_pdf}" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; padding: 8px 16px;">
+                                <svg width="16" height="16"><use href="#icon-external"></use></svg>
+                                <span>📄 Abrir en Nueva Ventana</span>
+                            </a>
+                        </div>
                         <iframe src="${detail.factura_pdf}" title="Factura PDF de ${detail.nombre}"></iframe>
-                        <p><a href="${detail.factura_pdf}" target="_blank" class="btn btn-primary">Abrir PDF en nueva ventana</a></p>
                     </div>
                 `;
             }
