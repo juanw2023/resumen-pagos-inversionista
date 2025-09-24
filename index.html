@@ -91,6 +91,13 @@
             gap: 12px;
             color: var(--text-muted);
             font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .navbar-cart-info:hover {
+            background: rgba(74, 144, 226, 0.1);
+            transform: scale(1.05);
         }
         .navbar-cart-badge {
             background: var(--danger);
@@ -432,8 +439,8 @@
         }
         .modal.show { display: grid; }
         .modal-dialog {
-            width: min(900px, 92vw);
-            max-height: 88vh;
+            width: min(95vw, 1200px);
+            max-height: 95vh;
             background: var(--surface-dark);
             border-radius: 14px;
             box-shadow: 0 10px 30px var(--shadow-color);
@@ -466,12 +473,153 @@
             border: 2px dashed var(--border-dark);
             border-radius: var(--radius);
             background: var(--bg-dark);
+            max-height: 75vh;
+            overflow: auto;
+            position: relative;
         }
         .document-viewer img {
-            max-width: 100%;
+            width: 100%;
             height: auto;
+            max-width: 100%;
             border-radius: var(--radius);
             box-shadow: 0 4px 15px var(--shadow-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            object-fit: contain;
+        }
+        .document-viewer img:hover {
+            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
+        }
+        .document-viewer img.zoomed {
+            cursor: zoom-out;
+            width: auto;
+            max-width: none;
+            height: auto;
+            transform-origin: center;
+        }
+        
+        /* Botones de acción para documentos */
+        .document-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+        .document-actions .btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        .document-actions .action-button {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            color: var(--text-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .document-actions .action-button:hover {
+            background: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .document-viewer {
+            position: relative;
+        }
+
+        /* Modal de pantalla completa */
+        .fullscreen-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .fullscreen-content {
+            width: 95%;
+            height: 95%;
+            display: flex;
+            flex-direction: column;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .fullscreen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .fullscreen-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .fullscreen-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .fullscreen-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .fullscreen-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .fullscreen-image {
+            max-width: 100%;
+            max-height: calc(100% - 80px);
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .fullscreen-actions {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .fullscreen-actions .btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
         }
         .document-viewer iframe {
             width: 100%;
@@ -664,6 +812,15 @@
         <symbol id="icon-close" viewBox="0 0 24 24">
             <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
         </symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+        </symbol>
+        <symbol id="icon-fullscreen" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+        </symbol>
+        <symbol id="icon-external" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+        </symbol>
     </svg>
 
     <!-- Navbar Sticky -->
@@ -674,7 +831,7 @@
                 Pagos Inversionista
             </div>
             <div class="navbar-actions">
-                <div class="navbar-cart-info">
+                <div class="navbar-cart-info" id="navbar-cart-info" onclick="scrollToCart()" style="cursor: pointer;" title="Ir al carrito">
                     <span id="navbar-cart-count">0 pagos</span>
                     <span id="navbar-cart-total">$0.00</span>
                 </div>
@@ -700,7 +857,7 @@
                         <div class="row">
                             <h3>DigitalOcean</h3>
                             <span class="space"></span>
-                            <span class="pill danger">Vencida</span>
+                            <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">$173.16 USD</p>
                         <p class="meta">Pago pendiente por la factura del periodo anterior (Agosto 2025). DigitalOcean es nuestro proveedor de infraestructura en la nube donde se aloja el sistema web que estamos implementando.</p>
@@ -720,7 +877,7 @@
                         <div class="row">
                             <h3>Google One — AI Pro</h3>
                             <span class="space"></span>
-                            <span class="pill warn">Pago Rechazado</span>
+                            <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">S/ 73.99</p>
                         <p class="meta">Intento de cobro rechazado para la suscripción de Septiembre 2025. Agradeceríamos actualizar el método de pago.</p>
@@ -740,7 +897,7 @@
                         <div class="row">
                             <h3>Shopify — Plan Básico</h3>
                             <span class="space"></span>
-                            <span class="pill ok">Activo</span>
+                            <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">$50.00 USD</p>
                         <p class="meta">Factura correspondiente a los ciclos de Septiembre y Octubre 2025.</p>
@@ -760,7 +917,7 @@
                         <div class="row">
                             <h3>GoDaddy</h3>
                             <span class="space"></span>
-                            <span class="pill warn">Pendiente</span>
+                            <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">S/ 357.98</p>
                         <p class="meta">Renovación anual del dominio principal y servicio de correo corporativo.</p>
@@ -836,6 +993,120 @@
                             </button>
                         </div>
                     </article>
+                    <article class="card" data-id="factura-e001-2778" data-name="Servicio de Contabilidad - Febrero 2025" data-amount="118.00" data-currency="USD">
+                        <div class="row">
+                            <h3>Contabilidad Feb 2025</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">$118.00 USD</p>
+                        <p class="meta">Factura E001-2778 por servicios de contabilidad del mes de febrero 2025.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="card" data-id="factura-e001-2811" data-name="Servicio de Contabilidad - Marzo 2025" data-amount="118.00" data-currency="USD">
+                        <div class="row">
+                            <h3>Contabilidad Mar 2025</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">$118.00 USD</p>
+                        <p class="meta">Factura E001-2811 por servicios de contabilidad del mes de marzo 2025.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="card" data-id="factura-e001-2842" data-name="Declaración Anual - Abril 2025" data-amount="118.00" data-currency="USD">
+                        <div class="row">
+                            <h3>Declaración Anual 2025</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">$118.00 USD</p>
+                        <p class="meta">Factura E001-2842 por elaboración y presentación de declaración anual.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="card" data-id="factura-e001-2859" data-name="Servicio de Contabilidad - Abril 2025" data-amount="118.00" data-currency="USD">
+                        <div class="row">
+                            <h3>Contabilidad Abr 2025</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">$118.00 USD</p>
+                        <p class="meta">Factura E001-2859 por servicios de contabilidad del mes de abril 2025.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="card" data-id="factura-e001-2913" data-name="Outsourcing Contable - Mayo 2025" data-amount="118.00" data-currency="USD">
+                        <div class="row">
+                            <h3>Outsourcing May 2025</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">$118.00 USD</p>
+                        <p class="meta">Factura E001-2913 por servicios de outsourcing contable del mes de mayo 2025.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="card" data-id="factura-e001-2952" data-name="Outsourcing Contable - Junio 2025" data-amount="118.00" data-currency="USD">
+                        <div class="row">
+                            <h3>Outsourcing Jun 2025</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">$118.00 USD</p>
+                        <p class="meta">Factura E001-2952 por servicios de outsourcing contable del mes de junio 2025.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
                 </section>
                 
                 <h2 class="section-title">Pagos de Mantenimiento</h2>
@@ -844,7 +1115,7 @@
                         <div class="row">
                             <h3>Mantenimiento - Cuenta Dólares</h3>
                             <span class="space"></span>
-                            <span class="pill ok">Programado</span>
+                            <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">$16.44 USD</p>
                         <p class="meta">Cobro mensual de mantenimiento por la cuenta corriente en dólares.</p>
@@ -864,7 +1135,7 @@
                         <div class="row">
                             <h3>Mantenimiento - Cuenta Soles</h3>
                             <span class="space"></span>
-                            <span class="pill ok">Programado</span>
+                            <span class="pill danger">Pendiente</span>
                         </div>
                         <p class="amount">S/ 67.25</p>
                         <p class="meta">Cobro mensual de mantenimiento por la cuenta corriente en soles.</p>
@@ -1087,6 +1358,42 @@
                             "screenshot": null,
                             "factura_pdf": "assets/HARMONYFE001-110824-08-2025(1).pdf",
                             "descripcion": "Servicios de almacén y logística correspondientes al mes de Agosto 2025. Incluye detracción del 10%."
+                        },
+                        "factura-e001-2778": {
+                            "nombre": "Servicio de Contabilidad - Febrero 2025",
+                            "descripcion": "Factura E001-2778 emitida el 03/02/2025 por servicios de contabilidad correspondientes al mes de febrero 2025. Importe total: $118.00",
+                            "screenshot": "assets/factura_E001-2778.png",
+                            "factura_pdf": "assets/E001-2778.pdf"
+                        },
+                        "factura-e001-2811": {
+                            "nombre": "Servicio de Contabilidad - Marzo 2025",
+                            "descripcion": "Factura E001-2811 emitida el 03/03/2025 por servicios de contabilidad correspondientes al mes de marzo 2025. Importe total: $118.00",
+                            "screenshot": "assets/factura_E001-2811.png",
+                            "factura_pdf": "assets/E001-2811.pdf"
+                        },
+                        "factura-e001-2842": {
+                            "nombre": "Declaración Anual - Abril 2025",
+                            "descripcion": "Factura E001-2842 emitida el 01/04/2025 por elaboración y presentación de declaración anual. Importe total: $118.00",
+                            "screenshot": "assets/factura_E001-2842.png",
+                            "factura_pdf": "assets/E001-2842.pdf"
+                        },
+                        "factura-e001-2859": {
+                            "nombre": "Servicio de Contabilidad - Abril 2025",
+                            "descripcion": "Factura E001-2859 emitida el 02/04/2025 por servicios de contabilidad correspondientes al mes de abril 2025. Importe total: $118.00",
+                            "screenshot": "assets/factura_E001-2859.png",
+                            "factura_pdf": "assets/E001-2859.pdf"
+                        },
+                        "factura-e001-2913": {
+                            "nombre": "Outsourcing Contable - Mayo 2025",
+                            "descripcion": "Factura E001-2913 emitida el 07/05/2025 por servicios de outsourcing contable del mes de mayo 2025. Importe total: $118.00",
+                            "screenshot": "assets/factura_E001-2913.png",
+                            "factura_pdf": "assets/E001-2913.pdf"
+                        },
+                        "factura-e001-2952": {
+                            "nombre": "Outsourcing Contable - Junio 2025",
+                            "descripcion": "Factura E001-2952 emitida el 03/06/2025 por servicios de outsourcing contable del mes de junio 2025. Importe total: $118.00",
+                            "screenshot": "assets/factura_E001-2952.png",
+                            "factura_pdf": "assets/E001-2952.pdf"
                         },
                         "mantenimiento-usd": {
                             "nombre": "Mantenimiento - Cuenta Dólares",
@@ -1542,9 +1849,18 @@
             if (detail.screenshot) {
                 content += `
                     <div class="document-viewer">
+                        <div class="document-actions">
+                            <button type="button" class="action-button download-document" onclick="downloadDocument('${detail.screenshot}', '${detail.nombre}_screenshot')" aria-label="Descargar" title="Descargar captura">
+                                <svg width="20" height="20"><use href="#icon-download"></use></svg>
+                            </button>
+                            <button type="button" class="action-button fullscreen-view" onclick="openImageFullscreen('${detail.screenshot}', '${detail.nombre}')" aria-label="Vista completa" title="Ver en pantalla completa">
+                                <svg width="20" height="20"><use href="#icon-fullscreen"></use></svg>
+                            </button>
+                        </div>
                         <h3>Captura de Pantalla</h3>
-                        <img src="${detail.screenshot}" alt="Screenshot de ${detail.nombre}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <img class="zoomable-image" src="${detail.screenshot}" alt="Screenshot de ${detail.nombre}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" title="Haz clic para zoom">
                         <p style="display: none; color: var(--text-muted);">Imagen no disponible: ${detail.screenshot}</p>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">💡 Haz clic en la imagen para verla en tamaño completo</p>
                     </div>
                 `;
             }
@@ -1552,6 +1868,14 @@
             if (detail.factura_pdf) {
                 content += `
                     <div class="document-viewer">
+                        <div class="document-actions">
+                            <button type="button" class="action-button download-document" onclick="downloadDocument('${detail.factura_pdf}', '${detail.nombre}_factura')" aria-label="Descargar" title="Descargar PDF">
+                                <svg width="20" height="20"><use href="#icon-download"></use></svg>
+                            </button>
+                            <button type="button" class="action-button fullscreen-view" onclick="openPdfFullscreen('${detail.factura_pdf}', '${detail.nombre}')" aria-label="Vista completa" title="Abrir en nueva ventana">
+                                <svg width="20" height="20"><use href="#icon-external"></use></svg>
+                            </button>
+                        </div>
                         <h3>Factura PDF</h3>
                         <iframe src="${detail.factura_pdf}" title="Factura PDF de ${detail.nombre}"></iframe>
                         <p><a href="${detail.factura_pdf}" target="_blank" class="btn btn-primary">Abrir PDF en nueva ventana</a></p>
@@ -1561,6 +1885,13 @@
 
             modalBody.innerHTML = content;
             modal.classList.add('show');
+            
+            // Agregar funcionalidad de zoom a imágenes
+            modal.querySelectorAll('.zoomable-image').forEach(img => {
+                img.addEventListener('click', () => {
+                    img.classList.toggle('zoomed');
+                });
+            });
         }
 
         // Event listeners
@@ -1659,31 +1990,34 @@
         function scrollToCart() {
             const cartSection = document.querySelector('.cart-container');
             if (cartSection) {
-                // En dispositivos móviles, scroll al top de la página primero
-                if (window.innerWidth <= 768) {
-                    window.scrollTo({ 
-                        top: 0, 
-                        behavior: 'smooth' 
-                    });
-                } else {
-                    // En desktop, scroll al carrito
-                    cartSection.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'start',
-                        inline: 'nearest'
-                    });
-                }
+                // Obtener la posición del carrito
+                const cartRect = cartSection.getBoundingClientRect();
+                const cartTop = cartRect.top + window.pageYOffset;
+                
+                // Scroll suave al carrito con un pequeño offset
+                window.scrollTo({ 
+                    top: cartTop - 20, // 20px de margen superior
+                    behavior: 'smooth' 
+                });
+                
+                // Efecto visual para destacar el carrito
+                cartSection.style.transition = 'all 0.3s ease';
+                cartSection.style.transform = 'scale(1.02)';
+                cartSection.style.boxShadow = '0 8px 25px rgba(74, 144, 226, 0.3)';
+                
+                // Restaurar el estilo después de un momento
+                setTimeout(() => {
+                    cartSection.style.transform = 'scale(1)';
+                    cartSection.style.boxShadow = '';
+                }, 600);
             }
         }
 
         // Event listeners
         document.getElementById('navbar-add-all-btn').addEventListener('click', () => {
-            const initialCartLength = cart.items.length;
             addAllToCart();
-            // Si se agregaron items, hacer scroll inmediatamente
-            if (cart.items.length > initialCartLength) {
-                setTimeout(scrollToCart, 200);
-            }
+            // Siempre hacer scroll al carrito después de intentar agregar
+            setTimeout(scrollToCart, 400);
         });
 
         processPaymentsBtn.addEventListener('click', addAllToCart);
@@ -1726,6 +2060,76 @@
                 shareBcpWhatsApp(accountNumber, cci, currency);
             });
         });
+
+        // Funciones para descarga y vista completa de documentos
+        function downloadDocument(url, filename = 'document') {
+            try {
+                // Crear un enlace temporal para la descarga
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showToast('Iniciando descarga...', 'success');
+            } catch (error) {
+                console.error('Error al descargar:', error);
+                showToast('Error al descargar el documento', 'danger');
+                
+                // Fallback: abrir en nueva ventana
+                window.open(url, '_blank');
+            }
+        }
+
+        function openImageFullscreen(imageUrl, title) {
+            // Crear modal de pantalla completa para imagen
+            const fullscreenModal = document.createElement('div');
+            fullscreenModal.className = 'fullscreen-modal';
+            fullscreenModal.innerHTML = `
+                <div class="fullscreen-content">
+                    <div class="fullscreen-header">
+                        <h3>${title} - Vista Completa</h3>
+                        <button class="fullscreen-close" onclick="this.closest('.fullscreen-modal').remove()">
+                            <svg width="24" height="24"><use href="#icon-close"></use></svg>
+                        </button>
+                    </div>
+                    <div class="fullscreen-body">
+                        <img src="${imageUrl}" alt="${title}" class="fullscreen-image">
+                        <div class="fullscreen-actions">
+                            <button onclick="downloadDocument('${imageUrl}', '${title}_screenshot')" class="btn btn-primary">
+                                <svg width="16" height="16"><use href="#icon-download"></use></svg>
+                                Descargar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Cerrar al hacer clic fuera
+            fullscreenModal.addEventListener('click', (e) => {
+                if (e.target === fullscreenModal) {
+                    fullscreenModal.remove();
+                }
+            });
+            
+            // Cerrar con ESC
+            const handleKeydown = (e) => {
+                if (e.key === 'Escape') {
+                    fullscreenModal.remove();
+                    document.removeEventListener('keydown', handleKeydown);
+                }
+            };
+            document.addEventListener('keydown', handleKeydown);
+            
+            document.body.appendChild(fullscreenModal);
+        }
+
+        function openPdfFullscreen(pdfUrl, title) {
+            // Para PDFs, simplemente abrir en nueva ventana
+            window.open(pdfUrl, '_blank');
+        }
 
         // Inicializar
         updateCartView();

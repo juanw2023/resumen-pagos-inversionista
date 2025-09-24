@@ -47,9 +47,15 @@
     },
     "godaddy": {
       "nombre": "GoDaddy",
-      "screenshot": "assets/dinnet_factura.png",
+      "screenshot": "assets/goodaddy.png",
       "factura_pdf": null,
       "descripcion": "Renovación del dominio principal y servicios de correo corporativo."
+    },
+    "Dinnet_almacenaje": {
+      "nombre": "Dinnet - Almacenaje",
+      "screenshot": "assets/dinnet_almacenaje_factura.png",
+      "factura_pdf": null,
+      "descripcion": "Servicios de almacenaje y logística proporcionados por Dinnet. Saldo de zapatillas que se quedo en almacén de aduanas por inspección de indecopi"
     },
     "grillo-1057": {
       "nombre": "Factura Grillo E001-1057",
@@ -68,8 +74,43 @@
       "screenshot": null,
     "factura_pdf": "assets/HARMONYFE001-110824-08-2025(1).pdf",
     "descripcion": "Servicios de almacén y logística correspondientes al mes de Agosto 2025. Incluye detracción del 10%."
-    }
-    ,
+    },
+    "factura-e001-2778": {
+      "nombre": "Servicio de Contabilidad - Febrero 2025",
+      "descripcion": "Factura E001-2778 emitida el 03/02/2025 por servicios de contabilidad correspondientes al mes de febrero 2025. Importe total: $118.00",
+      "screenshot": "assets/factura_E001-2778.png",
+      "factura_pdf": "assets/E001-2778.pdf"
+    },
+    "factura-e001-2811": {
+      "nombre": "Servicio de Contabilidad - Marzo 2025",
+      "descripcion": "Factura E001-2811 emitida el 03/03/2025 por servicios de contabilidad correspondientes al mes de marzo 2025. Importe total: $118.00",
+      "screenshot": "assets/factura_E001-2811.png",
+      "factura_pdf": "assets/E001-2811.pdf"
+    },
+    "factura-e001-2842": {
+      "nombre": "Declaración Anual - Abril 2025",
+      "descripcion": "Factura E001-2842 emitida el 01/04/2025 por elaboración y presentación de declaración anual. Importe total: $118.00",
+      "screenshot": "assets/factura_E001-2842.png",
+      "factura_pdf": "assets/E001-2842.pdf"
+    },
+    "factura-e001-2859": {
+      "nombre": "Servicio de Contabilidad - Abril 2025",
+      "descripcion": "Factura E001-2859 emitida el 02/04/2025 por servicios de contabilidad correspondientes al mes de abril 2025. Importe total: $118.00",
+      "screenshot": "assets/factura_E001-2859.png",
+      "factura_pdf": "assets/E001-2859.pdf"
+    },
+    "factura-e001-2913": {
+      "nombre": "Outsourcing Contable - Mayo 2025",
+      "descripcion": "Factura E001-2913 emitida el 07/05/2025 por servicios de outsourcing contable del mes de mayo 2025. Importe total: $118.00",
+      "screenshot": "assets/factura_E001-2913.png",
+      "factura_pdf": "assets/E001-2913.pdf"
+    },
+    "factura-e001-2952": {
+      "nombre": "Outsourcing Contable - Junio 2025",
+      "descripcion": "Factura E001-2952 emitida el 03/06/2025 por servicios de outsourcing contable del mes de junio 2025. Importe total: $118.00",
+      "screenshot": "assets/factura_E001-2952.png",
+      "factura_pdf": "assets/E001-2952.pdf"
+    },
     "mantenimiento-usd": {
       "nombre": "Mantenimiento - Cuenta Dólares",
       "screenshot": "assets/factura_cuenta_corriente_dolares.jpg",
