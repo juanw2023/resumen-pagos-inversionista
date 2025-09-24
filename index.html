@@ -349,6 +349,11 @@
         }
         .cart-accordion th { color: var(--text-muted); font-weight: 600; }
         .cart-accordion .remove-btn { background: none; border: none; color: var(--danger); cursor: pointer; }
+
+    /* Acordeón para cuentas bancarias */
+    .account-item-details summary { list-style: none; cursor: pointer; padding: 8px 12px; color: var(--text-primary); font-weight: 700; }
+    .account-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; }
+    .account-item .account-info { display: flex; flex-direction: column; gap: 4px; }
     </style>
 </head>
 <body>
@@ -591,7 +596,7 @@
                             <span class="cart-total-amount" id="total-pen">S/ 0.00</span>
                         </div>
                         <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" id="process-payments-btn">
-                            Notificar para Procesar Pagos
+                            Agregar todos al Carrito
                         </button>
                     </div>
 
@@ -815,17 +820,24 @@
             accountListEl.innerHTML = '';
 
             const currencies = [...new Set(cart.items.map(item => item.currency))];
-            
+
+            // Crear un acordeón por moneda
             currencies.forEach(currency => {
                 const account = bankData.cuentas?.[currency];
                 if (!account) return;
 
-                const accountDiv = document.createElement('div');
-                accountDiv.className = 'account-item';
-                accountDiv.innerHTML = `
+                const details = document.createElement('details');
+                details.className = 'account-item-details';
+                const summary = document.createElement('summary');
+                summary.textContent = `${account.banco} (${account.moneda})`;
+
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'account-item';
+                infoDiv.innerHTML = `
                     <div class="account-info">
                         <div class="account-number">${account.numero_cuenta}</div>
-                        <div class="account-bank">${account.banco} (${account.moneda})</div>
+                        <div class="account-bank">Titular: ${account.titular}</div>
+                        <div class="account-bank">CCI: ${account.cci || ''}</div>
                     </div>
                     <div class="account-actions">
                         <button class="btn btn-success btn-small copy-account" data-account="${account.numero_cuenta}" data-bank="${account.banco}">
@@ -836,7 +848,10 @@
                         </button>
                     </div>
                 `;
-                accountListEl.appendChild(accountDiv);
+
+                details.appendChild(summary);
+                details.appendChild(infoDiv);
+                accountListEl.appendChild(details);
             });
 
             // Event listeners para copiar y compartir
@@ -1024,12 +1039,33 @@
         });
 
         processPaymentsBtn.addEventListener('click', () => {
-            if (cart.items.length > 0) {
-                alert(`Se ha enviado la notificación para procesar ${cart.items.length} pago(s):\n\n` +
-                      `Total USD: $${cart.totals.USD.toFixed(2)}\n` +
-                      `Total PEN: S/ ${cart.totals.PEN.toFixed(2)}\n\n` +
-                      `El inversionista será contactado para completar los pagos seleccionados.`);
-            }
+            // Agregar todas las tarjetas visibles al carrito; evitar duplicados
+            const cards = document.querySelectorAll('main article.card');
+            let added = 0;
+            cards.forEach(card => {
+                const id = card.dataset.id;
+                // si ya está en el carrito, ignorar
+                if (cart.items.find(i => i.id === id)) return;
+
+                const item = {
+                    id: id,
+                    name: card.dataset.name,
+                    amount: card.dataset.amount,
+                    currency: card.dataset.currency
+                };
+                addToCart(item);
+                // deshabilitar botón de la card
+                const addBtn = card.querySelector('.add-to-cart-btn');
+                if (addBtn) {
+                    addBtn.disabled = true;
+                    const span = addBtn.querySelector('span');
+                    if (span) span.textContent = 'Añadido';
+                }
+                added++;
+            });
+
+            if (added > 0) showToast(`${added} pago(s) añadidos al carrito`);
+            else showToast('No hay pagos nuevos para agregar');
         });
 
         // Modal controls
