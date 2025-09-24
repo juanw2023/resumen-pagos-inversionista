@@ -30,6 +30,110 @@
             background-color: var(--bg-dark);
             color: var(--text-secondary);
             line-height: 1.6;
+            padding-top: 70px; /* Espacio para el navbar fijo */
+        }
+
+        /* Navbar Sticky */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(145deg, var(--surface-dark), #1a2331);
+            border-bottom: 2px solid var(--border-dark);
+            padding: 12px 20px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--brand-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        #navbar-add-all-btn {
+            background: var(--brand-primary);
+            color: var(--bg-dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #navbar-add-all-btn:hover {
+            background: #0ea5e9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+        .navbar-cart-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .navbar-cart-badge {
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 8px 16px;
+            }
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+            .navbar-cart-info {
+                display: none; /* Ocultar info detallada en móvil */
+            }
+            #navbar-add-all-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+            #navbar-add-all-btn span {
+                display: none; /* Solo mostrar icono en móvil muy pequeño */
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 60px;
+            }
+            .navbar {
+                padding: 6px 12px;
+            }
+            .navbar-brand {
+                font-size: 1rem;
+            }
         }
 
         /* Layout Principal */
@@ -63,30 +167,8 @@
             text-align: center;
             border-bottom: 1px solid var(--border-dark);
         }
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            gap: 20px;
-        }
         header h1 { margin: 0; font-size: 2.5rem; color: var(--text-primary); }
         header p { margin: 10px 0 0; color: var(--text-muted); font-size: 1.1rem; }
-        #add-all-btn {
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            #add-all-btn {
-                margin-left: 0 !important;
-                margin-top: 16px;
-            }
-        }
 
         .section-title {
             margin: 0 0 16px;
@@ -253,6 +335,83 @@
         .history-accordion.open .history-content { display: block; }
         .history-accordion .chev { transition: transform 0.2s ease; }
         .history-accordion.open .chev { transform: rotate(90deg); }
+
+        /* Cuentas BCP */
+        .bcp-accounts-section {
+            margin-top: 16px;
+        }
+        .bcp-accounts-content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 12px;
+        }
+        .bcp-account-card {
+            background: var(--surface-dark);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-dark);
+            padding: 16px;
+            transition: all 0.2s ease;
+        }
+        .bcp-account-card:hover {
+            border-color: var(--brand-primary);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.1);
+        }
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .currency-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .currency-badge.usd {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+        .currency-badge.pen {
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--brand-primary);
+        }
+        .account-number-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-dark);
+        }
+        .account-number-line:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .account-number-line .label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .account-number-line .account-number {
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .bcp-account-card .account-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .bcp-account-card .account-actions .btn-small {
+            flex: 1;
+            min-width: 80px;
+        }
 
         /* Modal */
         .modal {
@@ -482,18 +641,30 @@
         </symbol>
     </svg>
 
-    <div class="main-layout">
-        <header>
-            <div class="header-content">
-                <div>
-                    <h1>Resumen de Inversiones y Pagos</h1>
-                    <p>Un cordial saludo. A continuación, el estado de cuenta de los servicios activos.</p>
+    <!-- Navbar Sticky -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <svg class="icon" style="width: 24px; height: 24px;"><use href="#icon-cart"></use></svg>
+                Pagos Inversionista
+            </div>
+            <div class="navbar-actions">
+                <div class="navbar-cart-info">
+                    <span id="navbar-cart-count">0 pagos</span>
+                    <span id="navbar-cart-total">$0.00</span>
                 </div>
-                <button id="add-all-btn" class="btn btn-primary" style="margin-left: 20px;">
-                    <svg class="icon"><use href="#icon-cart"></use></svg>
-                    <span>Agregar Todos al Carrito</span>
+                <button id="navbar-add-all-btn">
+                    <svg class="icon" style="width: 18px; height: 18px;"><use href="#icon-cart"></use></svg>
+                    <span>Agregar Todos</span>
                 </button>
             </div>
+        </div>
+    </nav>
+
+    <div class="main-layout">
+        <header>
+            <h1>Resumen de Inversiones y Pagos</h1>
+            <p>Un cordial saludo. A continuación, el estado de cuenta de los servicios activos.</p>
         </header>
 
         <div class="content-wrapper">
@@ -719,27 +890,75 @@
                         <div id="account-list"></div>
                     </div>
 
-                    <div class="history-accordion" id="history-accordion">
-                        <div class="history-header">
-                            <span>Historial de Pagos</span>
-                            <svg class="icon chev"><use href="#icon-chevron"></use></svg>
+                    <div class="bcp-accounts-section" id="bcp-accounts">
+                        <div class="section-header">
+                            <h3 style="margin: 0; color: var(--brand-primary); font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                                🏦 Cuentas BCP para Depósitos
+                            </h3>
                         </div>
-                        <div class="history-content">
-                            <div class="history-item">
-                                <span>Factura Grillo (Mayo)</span>
-                                <span class="history-item-date">15/06/2025</span>
+                        <div class="bcp-accounts-content">
+                            <!-- Cuenta en Dólares -->
+                            <div class="bcp-account-card">
+                                <div class="account-header">
+                                    <h4 style="margin: 0; color: var(--text-primary);">💵 Cuenta Dólares (USD)</h4>
+                                    <span class="currency-badge usd">USD</span>
+                                </div>
+                                <div class="account-details">
+                                    <div class="account-number-line">
+                                        <span class="label">N° Cuenta:</span>
+                                        <span class="account-number" id="bcp-usd-account">1927120357106</span>
+                                    </div>
+                                    <div class="account-number-line">
+                                        <span class="label">CCI:</span>
+                                        <span class="account-number" id="bcp-usd-cci">00219200712035710633</span>
+                                    </div>
+                                </div>
+                                <div class="account-actions">
+                                    <button class="btn btn-primary btn-small" onclick="copyBcpAccount('1927120357106', 'Dólares')" title="Copiar número de cuenta">
+                                        <svg class="icon"><use href="#icon-copy"></use></svg>
+                                        Copiar N°
+                                    </button>
+                                    <button class="btn btn-primary btn-small" onclick="copyBcpCci('00219200712035710633', 'Dólares')" title="Copiar CCI">
+                                        <svg class="icon"><use href="#icon-copy"></use></svg>
+                                        Copiar CCI
+                                    </button>
+                                    <button class="btn btn-success btn-small" onclick="shareBcpWhatsApp('1927120357106', '00219200712035710633', 'Dólares')" title="Compartir por WhatsApp">
+                                        <svg class="icon"><use href="#icon-whatsapp"></use></svg>
+                                        WhatsApp
+                                    </button>
+                                </div>
                             </div>
-                            <div class="history-item">
-                                <span>Shopify (Jul-Ago)</span>
-                                <span class="history-item-date">22/08/2025</span>
-                            </div>
-                            <div class="history-item">
-                                <span>DigitalOcean (Julio)</span>
-                                <span class="history-item-date">05/08/2025</span>
-                            </div>
-                            <div class="history-item">
-                                <span>Google One (Agosto)</span>
-                                <span class="history-item-date">01/09/2025</span>
+
+                            <!-- Cuenta en Soles -->
+                            <div class="bcp-account-card">
+                                <div class="account-header">
+                                    <h4 style="margin: 0; color: var(--text-primary);">💰 Cuenta Soles (PEN)</h4>
+                                    <span class="currency-badge pen">PEN</span>
+                                </div>
+                                <div class="account-details">
+                                    <div class="account-number-line">
+                                        <span class="label">N° Cuenta:</span>
+                                        <span class="account-number" id="bcp-pen-account">1912627708003</span>
+                                    </div>
+                                    <div class="account-number-line">
+                                        <span class="label">CCI:</span>
+                                        <span class="account-number" id="bcp-pen-cci">00219100262770800357</span>
+                                    </div>
+                                </div>
+                                <div class="account-actions">
+                                    <button class="btn btn-primary btn-small" onclick="copyBcpAccount('1912627708003', 'Soles')" title="Copiar número de cuenta">
+                                        <svg class="icon"><use href="#icon-copy"></use></svg>
+                                        Copiar N°
+                                    </button>
+                                    <button class="btn btn-primary btn-small" onclick="copyBcpCci('00219100262770800357', 'Soles')" title="Copiar CCI">
+                                        <svg class="icon"><use href="#icon-copy"></use></svg>
+                                        Copiar CCI
+                                    </button>
+                                    <button class="btn btn-success btn-small" onclick="shareBcpWhatsApp('1912627708003', '00219100262770800357', 'Soles')" title="Compartir por WhatsApp">
+                                        <svg class="icon"><use href="#icon-whatsapp"></use></svg>
+                                        WhatsApp
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -940,6 +1159,28 @@
             window.open(url, '_blank');
         }
 
+        // Funciones para cuentas BCP
+        function copyBcpAccount(accountNumber, currency) {
+            copyToClipboard(accountNumber);
+            showToast(`✅ Número de cuenta ${currency} copiado`, 'success');
+        }
+
+        function copyBcpCci(cci, currency) {
+            copyToClipboard(cci);
+            showToast(`✅ CCI ${currency} copiado`, 'success');
+        }
+
+        function shareBcpWhatsApp(accountNumber, cci, currency) {
+            const message = `🏦 *Datos BCP para Depósito ${currency}*\n\n` +
+                          `💳 *Número de Cuenta:* ${accountNumber}\n` +
+                          `🔄 *CCI:* ${cci}\n` +
+                          `🏛️ *Banco:* BCP\n` +
+                          `💰 *Moneda:* ${currency}\n\n` +
+                          `Por favor, envía el comprobante de depósito después de la transferencia. ¡Gracias!`;
+            
+            shareWhatsApp(message);
+        }
+
         function updateBankAccounts() {
             if (cart.items.length === 0) {
                 bankAccountsEl.style.display = 'none';
@@ -1057,21 +1298,30 @@
             const cartCountEl = document.getElementById('cart-count');
             const cartTotalDisplayEl = document.getElementById('cart-total-display');
             
+            // Actualizar navbar
+            const navbarCartCount = document.getElementById('navbar-cart-count');
+            const navbarCartTotal = document.getElementById('navbar-cart-total');
+            
+            navbarCartCount.textContent = cart.items.length === 0 ? '0 pagos' : 
+                cart.items.length === 1 ? '1 pago' : `${cart.items.length} pagos`;
+            
+            const totalGeneral = cart.totals.USD + (cart.totals.PEN / 3.8); // conversión aprox
+            navbarCartTotal.textContent = `$${totalGeneral.toFixed(2)}`;
+            
             cartItemsEl.innerHTML = '';
             if (cart.items.length === 0) {
                 cartItemsEl.appendChild(cartEmptyMsgEl);
                 cartEmptyMsgEl.style.display = 'block';
                 cartSummaryEl.style.display = 'none';
-                cartHeaderEl.style.display = 'none';
+                if (cartHeaderEl) cartHeaderEl.style.display = 'none';
             } else {
                 cartEmptyMsgEl.style.display = 'none';
                 cartSummaryEl.style.display = 'block';
-                cartHeaderEl.style.display = 'flex';
+                if (cartHeaderEl) cartHeaderEl.style.display = 'flex';
                 
-                // Actualizar header del carrito
-                cartCountEl.textContent = cart.items.length;
-                const totalGeneral = cart.totals.USD + (cart.totals.PEN / 3.8); // conversión aprox para display
-                cartTotalDisplayEl.textContent = `$${totalGeneral.toFixed(2)} equiv.`;
+                // Actualizar header del carrito (si existe)
+                if (cartCountEl) cartCountEl.textContent = cart.items.length;
+                if (cartTotalDisplayEl) cartTotalDisplayEl.textContent = `$${totalGeneral.toFixed(2)} equiv.`;
 
                 // Agrupar por moneda
                 const byCurrency = cart.items.reduce((acc, item, idx) => {
@@ -1132,10 +1382,12 @@
             updateBankAccounts();
         }
 
-        function addToCart(item) {
+        function addToCart(item, showToastMessage = true) {
             // Verificar si el item ya está en el carrito
             if (cart.items.some(existingItem => existingItem.id === item.id)) {
-                showToast('Este pago ya está en el carrito', 'warning');
+                if (showToastMessage) {
+                    showToast('Este pago ya está en el carrito', 'warning');
+                }
                 return false;
             }
             
@@ -1146,8 +1398,11 @@
             const card = document.querySelector(`[data-id="${item.id}"]`);
             if (card) {
                 const button = card.querySelector('.add-to-cart-btn');
-                button.disabled = true;
-                button.querySelector('span').textContent = 'Ya agregado';
+                if (button) {
+                    button.disabled = true;
+                    const span = button.querySelector('span');
+                    if (span) span.textContent = 'Ya agregado';
+                }
             }
             
             updateCartView();
@@ -1226,10 +1481,10 @@
                     currency: card.dataset.currency
                 };
                 
-                addToCart(item);
-                
-                e.currentTarget.disabled = true;
-                e.currentTarget.querySelector('span').textContent = 'Añadido';
+                // La función addToCart se encarga de deshabilitar el botón y cambiar el texto
+                if (addToCart(item)) {
+                    showToast(`✅ ${item.name} agregado al carrito`, 'success');
+                }
             });
         });
 
@@ -1241,14 +1496,22 @@
             });
         });
 
-        // Función para agregar todos los pagos
+        // Función optimizada para agregar todos los pagos
         function addAllToCart() {
             const cards = document.querySelectorAll('main article.card');
             let added = 0;
+            const itemsToAdd = [];
+            
+            // Primero, recopilar todos los items que no están en el carrito
             cards.forEach(card => {
                 const id = card.dataset.id;
-                // si ya está en el carrito, ignorar
-                if (cart.items.find(i => i.id === id)) return;
+                console.log('Procesando card con ID:', id); // Debug
+                
+                // Si ya está en el carrito, ignorar
+                if (cart.items.find(i => i.id === id)) {
+                    console.log('Item ya existe en carrito:', id); // Debug
+                    return;
+                }
 
                 const item = {
                     id: id,
@@ -1256,20 +1519,57 @@
                     amount: card.dataset.amount,
                     currency: card.dataset.currency
                 };
-                if (addToCart(item)) {
-                    added++;
-                }
+                
+                console.log('Item a agregar:', item); // Debug
+                itemsToAdd.push({item, card});
             });
 
+            // Agregar todos los items de una vez
+            itemsToAdd.forEach(({item, card}) => {
+                // Verificar de nuevo antes de agregar (por si acaso)
+                if (cart.items.some(existingItem => existingItem.id === item.id)) return;
+                
+                // Agregar al carrito
+                cart.items.push(item);
+                cart.totals[item.currency] += parseFloat(item.amount);
+                
+                // Deshabilitar botón
+                const button = card.querySelector('.add-to-cart-btn');
+                if (button) {
+                    button.disabled = true;
+                    const span = button.querySelector('span');
+                    if (span) span.textContent = 'Ya agregado';
+                }
+                
+                added++;
+            });
+
+            // Actualizar vista una sola vez
+            updateCartView();
+
             if (added > 0) {
-                showToast(`${added} pago(s) agregados al carrito`, 'success');
+                showToast(`✅ ${added} pago(s) agregados al carrito`, 'success');
+                
+                // Desplazar automáticamente al carrito después de un breve delay
+                setTimeout(() => {
+                    const cartSection = document.querySelector('.cart-container');
+                    if (cartSection) {
+                        cartSection.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                }, 500);
             } else {
-                showToast('Todos los pagos ya están en el carrito', 'info');
+                showToast('ℹ️ Todos los pagos ya están en el carrito', 'info');
             }
+            
+            console.log('Total items agregados:', added); // Debug
+            console.log('Items en carrito:', cart.items.length); // Debug
         }
 
-        // Event listener para el botón "Agregar Todos" del header
-        document.getElementById('add-all-btn').addEventListener('click', addAllToCart);
+        // Event listener para el botón "Agregar Todos" del navbar
+        document.getElementById('navbar-add-all-btn').addEventListener('click', addAllToCart);
 
         processPaymentsBtn.addEventListener('click', addAllToCart);
 
@@ -1282,11 +1582,6 @@
             if (e.target === e.currentTarget) {
                 e.currentTarget.classList.remove('show');
             }
-        });
-
-        // Historial accordion
-        document.getElementById('history-accordion').querySelector('.history-header').addEventListener('click', () => {
-            document.getElementById('history-accordion').classList.toggle('open');
         });
 
         // Inicializar
