@@ -54,20 +54,20 @@
     "grillo-1057": {
       "nombre": "Factura Grillo E001-1057",
       "screenshot": null,
-      "factura_pdf": "assets/HARMONYKICKS FE001-1057 27-06-2025 (1).pdf",
+    "factura_pdf": "assets/HARMONYKICKSFE001-105727-06-2025(1).pdf",
       "descripcion": "Servicios de almacén y logística correspondientes al mes de Junio 2025."
     },
     "grillo-1082": {
       "nombre": "Factura Grillo E001-1082",
       "screenshot": null,
-      "factura_pdf": "assets/HARMONY FE001-1082 24-07-2025 (1).pdf",
+    "factura_pdf": "assets/HARMONYFE001-108224-07-2025(1).pdf",
       "descripcion": "Servicios de almacén y logística correspondientes al mes de Julio 2025. Incluye detracción del 10%."
     },
     "grillo-1108": {
       "nombre": "Factura Grillo E001-1108",
       "screenshot": null,
-      "factura_pdf": "assets/HARMONY FE001-1108 24-08-2025 (1).pdf",
-      "descripción": "Servicios de almacén y logística correspondientes al mes de Agosto 2025. Incluye detracción del 10%."
+    "factura_pdf": "assets/HARMONYFE001-110824-08-2025(1).pdf",
+    "descripcion": "Servicios de almacén y logística correspondientes al mes de Agosto 2025. Incluye detracción del 10%."
     }
   }
 }

@@ -573,16 +573,113 @@
     <!-- Toast para notificaciones -->
     <div id="toast" class="toast"></div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Cargar datos de cuentas bancarias
-        let bankData = {};
-        try {
-            const response = await fetch('./cuentas_bancarias.json');
-            bankData = await response.json();
-        } catch (error) {
-            console.error('Error cargando datos bancarios:', error);
+        <!-- Fallback embebido de `cuentas_bancarias.json` para ejecución sin servidor -->
+        <script id="bank-data-fallback" type="application/json">
+        {
+            "cuentas": {
+                "USD": {
+                    "banco": "Banco de Crédito del Perú (BCP)",
+                    "titular": "HARMONYKICKS E.I.R.L.",
+                    "numero_cuenta": "194-2345678-1-23",
+                    "cci": "002-194-002345678123-45",
+                    "tipo_cuenta": "Cuenta Corriente",
+                    "moneda": "USD",
+                    "swift": "BCPLPEPL"
+                },
+                "PEN": {
+                    "banco": "Banco de Crédito del Perú (BCP)",
+                    "titular": "HARMONYKICKS E.I.R.L.",
+                    "numero_cuenta": "194-1234567-0-89",
+                    "cci": "002-194-001234567089-12",
+                    "tipo_cuenta": "Cuenta Corriente",
+                    "moneda": "PEN",
+                    "swift": "BCPLPEPL"
+                },
+                "YAPE": {
+                    "banco": "Yape",
+                    "titular": "HARMONYKICKS E.I.R.L.",
+                    "numero_cuenta": "+51 987 654 321",
+                    "tipo_cuenta": "Billetera Digital",
+                    "moneda": "PEN"
+                }
+            },
+            "detalles_facturas": {
+                "do": {
+                    "nombre": "DigitalOcean",
+                    "screenshot": "assets/digital_ocean_factura.png",
+                    "factura_pdf": null,
+                    "descripcion": "DigitalOcean es nuestro proveedor de infraestructura en la nube donde se aloja el sistema web que estamos implementando. Proporciona servidores virtuales (droplets), bases de datos, almacenamiento y servicios de red que garantizan la disponibilidad y escalabilidad de nuestras aplicaciones."
+                },
+                "g-one": {
+                    "nombre": "Google One (AI Pro)",
+                    "screenshot": "assets/google_one_factura.png",
+                    "factura_pdf": null,
+                    "descripcion": "Suscripción premium de Google One con funciones de IA avanzadas y 2TB de almacenamiento en la nube."
+                },
+                "shopify": {
+                    "nombre": "Shopify",
+                    "screenshot": "assets/shopify_factura.png",
+                    "factura_pdf": null,
+                    "descripcion": "Plataforma de comercio electrónico para la gestión de la tienda online."
+                },
+                "godaddy": {
+                    "nombre": "GoDaddy",
+                    "screenshot": "assets/dinnet_factura.png",
+                    "factura_pdf": null,
+                    "descripcion": "Renovación del dominio principal y servicios de correo corporativo."
+                },
+                "grillo-1057": {
+                    "nombre": "Factura Grillo E001-1057",
+                    "screenshot": null,
+                    "factura_pdf": "assets/HARMONYKICKSFE001-105727-06-2025(1).pdf",
+                    "descripcion": "Servicios de almacén y logística correspondientes al mes de Junio 2025."
+                },
+                "grillo-1082": {
+                    "nombre": "Factura Grillo E001-1082",
+                    "screenshot": null,
+                    "factura_pdf": "assets/HARMONYFE001-108224-07-2025(1).pdf",
+                    "descripcion": "Servicios de almacén y logística correspondientes al mes de Julio 2025. Incluye detracción del 10%."
+                },
+                "grillo-1108": {
+                    "nombre": "Factura Grillo E001-1108",
+                    "screenshot": null,
+                    "factura_pdf": "assets/HARMONYFE001-110824-08-2025(1).pdf",
+                    "descripcion": "Servicios de almacén y logística correspondientes al mes de Agosto 2025. Incluye detracción del 10%."
+                }
+            }
         }
+        </script>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+                // Cargar datos de cuentas bancarias: intentamos fetch, si falla usamos el fallback embebido
+                let bankData = {};
+                async function loadBankData() {
+                        try {
+                                // primero intentamos cargar el JSON por fetch (funciona en servidores y Vercel)
+                                const response = await fetch('./cuentas_bancarias.json');
+                                if (response.ok) {
+                                        return await response.json();
+                                }
+                                console.warn('Fetch de cuentas_bancarias.json respondió con status', response.status);
+                        } catch (err) {
+                                console.warn('Error en fetch cuentas_bancarias.json:', err.message || err);
+                        }
+
+                        // fallback: leer contenido JSON embebido en la página (útil para file:// o cuando fetch falla)
+                        try {
+                                const fallbackEl = document.getElementById('bank-data-fallback');
+                                if (fallbackEl) {
+                                        return JSON.parse(fallbackEl.textContent);
+                                }
+                        } catch (err) {
+                                console.error('Error parseando fallback bank data:', err);
+                        }
+
+                        return {};
+                }
+
+                bankData = await loadBankData();
 
         const cart = {
             items: [],
@@ -744,6 +841,7 @@
         }
 
         function showDetailModal(itemId) {
+            console.log('showDetailModal itemId:', itemId, 'detail:', bankData.detalles_facturas && bankData.detalles_facturas[itemId]);
             const modal = document.getElementById('detail-modal');
             const modalTitle = document.getElementById('detail-modal-title');
             const modalBody = document.getElementById('detail-modal-body');
