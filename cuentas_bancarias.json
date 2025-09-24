@@ -69,6 +69,19 @@
     "factura_pdf": "assets/HARMONYFE001-110824-08-2025(1).pdf",
     "descripcion": "Servicios de almacén y logística correspondientes al mes de Agosto 2025. Incluye detracción del 10%."
     }
+    ,
+    "mantenimiento-usd": {
+      "nombre": "Mantenimiento - Cuenta Dólares",
+      "screenshot": null,
+      "factura_pdf": null,
+      "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en dólares. Importe: $15.00"
+    },
+    "mantenimiento-pen": {
+      "nombre": "Mantenimiento - Cuenta Soles",
+      "screenshot": null,
+      "factura_pdf": null,
+      "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en soles. Importe: S/10.00"
+    }
   }
 }
 
