@@ -63,8 +63,30 @@
             text-align: center;
             border-bottom: 1px solid var(--border-dark);
         }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 20px;
+        }
         header h1 { margin: 0; font-size: 2.5rem; color: var(--text-primary); }
         header p { margin: 10px 0 0; color: var(--text-muted); font-size: 1.1rem; }
+        #add-all-btn {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            #add-all-btn {
+                margin-left: 0 !important;
+                margin-top: 16px;
+            }
+        }
 
         .section-title {
             margin: 0 0 16px;
@@ -128,6 +150,22 @@
         .btn-secondary:hover { background: var(--border-dark); color: var(--text-primary); }
         .btn-success { background: var(--success); color: var(--bg-dark); }
         .btn-success:hover { background: #22c55e; }
+        .btn-small { 
+            padding: 6px 10px; 
+            font-size: 0.8rem; 
+            margin: 0 2px;
+        }
+        .account-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+            align-items: center;
+        }
+        .account-actions .btn-small {
+            flex: 1;
+            min-width: 90px;
+        }
 
         .pill {
             display: inline-flex; align-items: center; gap: 6px; border-radius: 999px;
@@ -320,11 +358,12 @@
         }
         /* Carrito acordeón */
         .cart-accordion details {
-            background: transparent;
+            background: var(--bg-dark);
             border: 1px solid var(--border-dark);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         .cart-accordion summary {
             list-style: none;
@@ -332,23 +371,82 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            padding: 8px 12px;
+            padding: 12px 16px;
             font-weight: 700;
             color: var(--text-primary);
+            background: var(--surface-dark);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: background-color 0.2s ease;
+        }
+        .cart-accordion summary:hover {
+            background: #374151;
         }
         .cart-accordion table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 8px;
+            margin-top: 12px;
         }
         .cart-accordion th, .cart-accordion td {
-            padding: 8px 6px;
-            border-bottom: 1px dashed var(--border-dark);
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border-dark);
             text-align: left;
             font-size: 0.95rem;
         }
-        .cart-accordion th { color: var(--text-muted); font-weight: 600; }
-        .cart-accordion .remove-btn { background: none; border: none; color: var(--danger); cursor: pointer; }
+        .cart-accordion th { 
+            color: var(--text-muted); 
+            font-weight: 600; 
+            background: var(--surface-dark);
+        }
+        .cart-accordion td {
+            color: var(--text-secondary);
+        }
+        .cart-accordion .remove-btn { 
+            background: none; 
+            border: none; 
+            color: var(--danger); 
+            cursor: pointer; 
+            padding: 6px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        .cart-accordion .remove-btn:hover {
+            background: rgba(248, 113, 113, 0.1);
+        }
+        
+        /* Ícono de carrito persistente */
+        .cart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: var(--surface-dark);
+            border-radius: 10px;
+            border: 1px solid var(--border-dark);
+        }
+        .cart-icon-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .cart-icon-badge {
+            background: var(--brand-primary);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .cart-total-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--brand-primary);
+        }
 
     /* Acordeón para cuentas bancarias */
     .account-item-details summary { list-style: none; cursor: pointer; padding: 8px 12px; color: var(--text-primary); font-weight: 700; }
@@ -386,8 +484,16 @@
 
     <div class="main-layout">
         <header>
-            <h1>Resumen de Inversiones y Pagos</h1>
-            <p>Un cordial saludo. A continuación, el estado de cuenta de los servicios activos.</p>
+            <div class="header-content">
+                <div>
+                    <h1>Resumen de Inversiones y Pagos</h1>
+                    <p>Un cordial saludo. A continuación, el estado de cuenta de los servicios activos.</p>
+                </div>
+                <button id="add-all-btn" class="btn btn-primary" style="margin-left: 20px;">
+                    <svg class="icon"><use href="#icon-cart"></use></svg>
+                    <span>Agregar Todos al Carrito</span>
+                </button>
+            </div>
         </header>
 
         <div class="content-wrapper">
@@ -538,13 +644,13 @@
                 
                 <h2 class="section-title">Pagos de Mantenimiento</h2>
                 <section class="grid">
-                    <article class="card" data-id="mantenimiento-usd" data-name="Mantenimiento Cuenta Dólares" data-amount="15.00" data-currency="USD">
+                    <article class="card" data-id="mantenimiento-usd" data-name="Mantenimiento Cuenta Dólares" data-amount="16.44" data-currency="USD">
                         <div class="row">
                             <h3>Mantenimiento - Cuenta Dólares</h3>
                             <span class="space"></span>
                             <span class="pill ok">Programado</span>
                         </div>
-                        <p class="amount">$15.00 USD</p>
+                        <p class="amount">$16.44 USD</p>
                         <p class="meta">Cobro mensual de mantenimiento por la cuenta corriente en dólares.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
@@ -558,13 +664,13 @@
                         </div>
                     </article>
 
-                    <article class="card" data-id="mantenimiento-pen" data-name="Mantenimiento Cuenta Soles" data-amount="10.00" data-currency="PEN">
+                    <article class="card" data-id="mantenimiento-pen" data-name="Mantenimiento Cuenta Soles" data-amount="67.25" data-currency="PEN">
                         <div class="row">
                             <h3>Mantenimiento - Cuenta Soles</h3>
                             <span class="space"></span>
                             <span class="pill ok">Programado</span>
                         </div>
-                        <p class="amount">S/ 10.00</p>
+                        <p class="amount">S/ 67.25</p>
                         <p class="meta">Cobro mensual de mantenimiento por la cuenta corriente en soles.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
@@ -583,6 +689,13 @@
             <aside>
                 <div class="cart-container">
                     <h2 class="section-title">Carrito de Pagos</h2>
+                    <div class="cart-header" id="cart-header" style="display: none;">
+                        <div class="cart-icon-container">
+                            <svg class="icon" style="width: 24px; height: 24px; color: var(--brand-primary);"><use href="#icon-cart"></use></svg>
+                            <span class="cart-icon-badge" id="cart-count">0</span>
+                        </div>
+                        <div class="cart-total-display" id="cart-total-display">$0.00</div>
+                    </div>
                     <ul class="cart-items" id="cart-items">
                         <p id="cart-empty-msg">No hay pagos seleccionados.</p>
                     </ul>
@@ -729,13 +842,13 @@
                             "nombre": "Mantenimiento - Cuenta Dólares",
                             "screenshot": "assets/factura_cuenta_corriente_dolares.jpg",
                             "factura_pdf": null,
-                            "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en dólares. Importe: $15.00"
+                            "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en dólares. Importe: $16.44"
                         },
                         "mantenimiento-pen": {
                             "nombre": "Mantenimiento - Cuenta Soles",
                             "screenshot": "assets/factura_cuenta_corriente_soles.jpg",
                             "factura_pdf": null,
-                            "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en soles. Importe: S/10.00"
+                            "descripcion": "Cobro mensual de mantenimiento por la cuenta corriente en soles. Importe: S/67.25"
                         }
             }
         }
@@ -790,11 +903,28 @@
         const accountListEl = document.getElementById('account-list');
 
         // Funciones de utilidad
-        function showToast(message) {
+        function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
             toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            toast.className = `show ${type}`; // Agregamos type para estilos
+            setTimeout(() => toast.classList.remove('show', type), 3000);
+        }
+
+        function initializeButtonStates() {
+            // Inicializar estado de todos los botones según lo que ya esté en el carrito
+            document.querySelectorAll('main article.card').forEach(card => {
+                const id = card.dataset.id;
+                const button = card.querySelector('.add-to-cart-btn');
+                const isInCart = cart.items.some(item => item.id === id);
+                
+                if (button) {
+                    button.disabled = isInCart;
+                    const span = button.querySelector('span');
+                    if (span) {
+                        span.textContent = isInCart ? 'Ya agregado' : 'Añadir al Carrito';
+                    }
+                }
+            });
         }
 
         function copyToClipboard(text) {
@@ -819,77 +949,129 @@
             bankAccountsEl.style.display = 'block';
             accountListEl.innerHTML = '';
 
-            const currencies = [...new Set(cart.items.map(item => item.currency))];
+            const byCurrency = cart.items.reduce((acc, item) => {
+                (acc[item.currency] = acc[item.currency] || []).push(item);
+                return acc;
+            }, {});
 
             // Crear un acordeón por moneda
-            currencies.forEach(currency => {
-                const account = bankData.cuentas?.[currency];
-                if (!account) return;
+            Object.keys(byCurrency).forEach(currency => {
+                const items = byCurrency[currency];
+                const accounts = data.accounts.filter(acc => acc.currency === currency);
+                
+                if (accounts.length === 0) return;
+                
+                accounts.forEach(account => {
+                    const details = document.createElement('details');
+                    details.className = 'account-item-details';
+                    details.open = true; // Abrir por defecto
+                    const summary = document.createElement('summary');
+                    const symbol = currency === 'USD' ? '$' : 'S/';
+                    summary.innerHTML = `
+                        <span>💳 ${account.bank} - ${account.type}</span>
+                        <span style="font-weight: bold; color: #2563eb;">${symbol}${cart.totals[currency].toFixed(2)}</span>
+                    `;
 
-                const details = document.createElement('details');
-                details.className = 'account-item-details';
-                const summary = document.createElement('summary');
-                summary.textContent = `${account.banco} (${account.moneda})`;
+                    // Crear mensaje detallado para copiar/WhatsApp
+                    const conceptos = items.map(item => `• ${item.name}: ${symbol}${parseFloat(item.amount).toFixed(2)}`).join('\n');
+                    const message = `💳 *Transferencia ${currency}*\n\n` +
+                                  `*Banco:* ${account.bank}\n` +
+                                  `*Tipo:* ${account.type}\n` +
+                                  `*Número:* ${account.number}\n` +
+                                  `*Titular:* ${account.holder}\n` +
+                                  `*CCI:* ${account.cci}\n\n` +
+                                  `*Total a transferir:* ${symbol}${cart.totals[currency].toFixed(2)}\n\n` +
+                                  `*Conceptos:*\n${conceptos}`;
 
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'account-item';
-                infoDiv.innerHTML = `
-                    <div class="account-info">
-                        <div class="account-number">${account.numero_cuenta}</div>
-                        <div class="account-bank">Titular: ${account.titular}</div>
-                        <div class="account-bank">CCI: ${account.cci || ''}</div>
-                    </div>
-                    <div class="account-actions">
-                        <button class="btn btn-success btn-small copy-account" data-account="${account.numero_cuenta}" data-bank="${account.banco}">
-                            <svg class="icon"><use href="#icon-copy"></use></svg>
-                        </button>
-                        <button class="btn btn-success btn-small share-whatsapp" data-account="${account.numero_cuenta}" data-bank="${account.banco}" data-currency="${currency}">
-                            <svg class="icon"><use href="#icon-whatsapp"></use></svg>
-                        </button>
-                    </div>
-                `;
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'account-item';
+                    infoDiv.innerHTML = `
+                        <div class="account-info">
+                            <div class="account-number">${account.number}</div>
+                            <div class="account-bank">Titular: ${account.holder}</div>
+                            <div class="account-bank">CCI: ${account.cci}</div>
+                            <div class="account-total">Total: <span style="font-weight: bold; color: #2563eb;">${symbol}${cart.totals[currency].toFixed(2)}</span></div>
+                        </div>
+                        <div class="account-actions">
+                            <button class="btn btn-primary btn-small copy-account-number" data-account="${account.number}" title="Copiar número de cuenta">
+                                <svg class="icon"><use href="#icon-copy"></use></svg>
+                                Copiar N°
+                            </button>
+                            <button class="btn btn-primary btn-small share-account-number" data-account="${account.number}" title="Compartir número por WhatsApp">
+                                <svg class="icon"><use href="#icon-whatsapp"></use></svg>
+                                Compartir N°
+                            </button>
+                            <button class="btn btn-success btn-small copy-full-details" data-message="${message.replace(/"/g, '&quot;')}" title="Copiar todos los datos">
+                                <svg class="icon"><use href="#icon-copy"></use></svg>
+                                Copiar Todo
+                            </button>
+                            <button class="btn btn-success btn-small share-full-details" data-message="${message.replace(/"/g, '&quot;')}" title="Enviar todo por WhatsApp">
+                                <svg class="icon"><use href="#icon-whatsapp"></use></svg>
+                                Enviar Todo
+                            </button>
+                        </div>
+                    `;
 
-                details.appendChild(summary);
-                details.appendChild(infoDiv);
-                accountListEl.appendChild(details);
-            });
-
-            // Event listeners para copiar y compartir
-            document.querySelectorAll('.copy-account').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const account = e.currentTarget.dataset.account;
-                    copyToClipboard(account);
+                    details.appendChild(summary);
+                    details.appendChild(infoDiv);
+                    accountListEl.appendChild(details);
                 });
             });
 
-            document.querySelectorAll('.share-whatsapp').forEach(btn => {
+            // Event listeners para botones de número de cuenta
+            document.querySelectorAll('.copy-account-number').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const account = e.currentTarget.dataset.account;
-                    const bank = e.currentTarget.dataset.bank;
-                    const currency = e.currentTarget.dataset.currency;
-                    const total = cart.totals[currency].toFixed(2);
-                    const symbol = currency === 'USD' ? '$' : 'S/';
-                    
-                    const message = `Hola, necesito realizar una transferencia:\n\n` +
-                                  `💰 Monto: ${symbol}${total} ${currency}\n` +
-                                  `🏦 Banco: ${bank}\n` +
-                                  `📋 Cuenta: ${account}\n\n` +
-                                  `Gracias.`;
-                    
+                    const accountNumber = e.currentTarget.dataset.account;
+                    copyToClipboard(accountNumber);
+                    showToast('Número de cuenta copiado', 'success');
+                });
+            });
+
+            document.querySelectorAll('.share-account-number').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const accountNumber = e.currentTarget.dataset.account;
+                    const message = `Número de cuenta: ${accountNumber}`;
+                    shareWhatsApp(message);
+                });
+            });
+
+            // Event listeners para botones de datos completos
+            document.querySelectorAll('.copy-full-details').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const message = e.currentTarget.dataset.message.replace(/&quot;/g, '"');
+                    copyToClipboard(message);
+                    showToast('Datos completos copiados al portapapeles', 'success');
+                });
+            });
+
+            document.querySelectorAll('.share-full-details').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const message = e.currentTarget.dataset.message.replace(/&quot;/g, '"');
                     shareWhatsApp(message);
                 });
             });
         }
 
         function updateCartView() {
+            const cartHeaderEl = document.getElementById('cart-header');
+            const cartCountEl = document.getElementById('cart-count');
+            const cartTotalDisplayEl = document.getElementById('cart-total-display');
+            
             cartItemsEl.innerHTML = '';
             if (cart.items.length === 0) {
                 cartItemsEl.appendChild(cartEmptyMsgEl);
                 cartEmptyMsgEl.style.display = 'block';
                 cartSummaryEl.style.display = 'none';
+                cartHeaderEl.style.display = 'none';
             } else {
                 cartEmptyMsgEl.style.display = 'none';
                 cartSummaryEl.style.display = 'block';
+                cartHeaderEl.style.display = 'flex';
+                
+                // Actualizar header del carrito
+                cartCountEl.textContent = cart.items.length;
+                const totalGeneral = cart.totals.USD + (cart.totals.PEN / 3.8); // conversión aprox para display
+                cartTotalDisplayEl.textContent = `$${totalGeneral.toFixed(2)} equiv.`;
 
                 // Agrupar por moneda
                 const byCurrency = cart.items.reduce((acc, item, idx) => {
@@ -903,13 +1085,17 @@
                 Object.keys(byCurrency).forEach(currency => {
                     const group = byCurrency[currency];
                     const details = document.createElement('details');
+                    details.open = true; // Abrir por defecto
                     const summary = document.createElement('summary');
                     const symbol = currency === 'USD' ? '$' : 'S/';
-                    summary.innerHTML = `${currency} — Total: ${symbol}${cart.totals[currency].toFixed(2)}`;
+                    summary.innerHTML = `
+                        <span>${currency} (${group.length} item${group.length > 1 ? 's' : ''})</span>
+                        <span>${symbol}${cart.totals[currency].toFixed(2)}</span>
+                    `;
 
                     const table = document.createElement('table');
                     table.innerHTML = `
-                        <thead><tr><th>Concepto</th><th>Monto</th><th></th></tr></thead>
+                        <thead><tr><th>Concepto</th><th>Monto</th><th style="width: 40px;"></th></tr></thead>
                         <tbody></tbody>
                     `;
 
@@ -917,9 +1103,9 @@
                     group.forEach(item => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${item.name}</td>
-                            <td>${symbol}${parseFloat(item.amount).toFixed(2)}</td>
-                            <td><button class="remove-btn" data-index="${item.index}"><svg class="icon" style="width:16px;height:16px;"><use href="#icon-remove"></use></svg></button></td>
+                            <td style="max-width: 180px; word-wrap: break-word;">${item.name}</td>
+                            <td style="font-weight: 600;">${symbol}${parseFloat(item.amount).toFixed(2)}</td>
+                            <td><button class="remove-btn" data-index="${item.index}" title="Eliminar"><svg class="icon" style="width:16px;height:16px;"><use href="#icon-remove"></use></svg></button></td>
                         `;
                         tbody.appendChild(tr);
                     });
@@ -947,9 +1133,25 @@
         }
 
         function addToCart(item) {
+            // Verificar si el item ya está en el carrito
+            if (cart.items.some(existingItem => existingItem.id === item.id)) {
+                showToast('Este pago ya está en el carrito', 'warning');
+                return false;
+            }
+            
             cart.items.push(item);
             cart.totals[item.currency] += parseFloat(item.amount);
+            
+            // Deshabilitar botón del item agregado
+            const card = document.querySelector(`[data-id="${item.id}"]`);
+            if (card) {
+                const button = card.querySelector('.add-to-cart-btn');
+                button.disabled = true;
+                button.querySelector('span').textContent = 'Ya agregado';
+            }
+            
             updateCartView();
+            return true;
         }
 
         function removeFromCart(index) {
@@ -957,6 +1159,7 @@
             cart.totals[item.currency] -= parseFloat(item.amount);
             cart.items.splice(index, 1);
             
+            // Rehabilitar botón del item removido
             const card = document.querySelector(`[data-id="${item.id}"]`);
             if (card) {
                 const button = card.querySelector('.add-to-cart-btn');
@@ -1038,8 +1241,8 @@
             });
         });
 
-        processPaymentsBtn.addEventListener('click', () => {
-            // Agregar todas las tarjetas visibles al carrito; evitar duplicados
+        // Función para agregar todos los pagos
+        function addAllToCart() {
             const cards = document.querySelectorAll('main article.card');
             let added = 0;
             cards.forEach(card => {
@@ -1053,20 +1256,22 @@
                     amount: card.dataset.amount,
                     currency: card.dataset.currency
                 };
-                addToCart(item);
-                // deshabilitar botón de la card
-                const addBtn = card.querySelector('.add-to-cart-btn');
-                if (addBtn) {
-                    addBtn.disabled = true;
-                    const span = addBtn.querySelector('span');
-                    if (span) span.textContent = 'Añadido';
+                if (addToCart(item)) {
+                    added++;
                 }
-                added++;
             });
 
-            if (added > 0) showToast(`${added} pago(s) añadidos al carrito`);
-            else showToast('No hay pagos nuevos para agregar');
-        });
+            if (added > 0) {
+                showToast(`${added} pago(s) agregados al carrito`, 'success');
+            } else {
+                showToast('Todos los pagos ya están en el carrito', 'info');
+            }
+        }
+
+        // Event listener para el botón "Agregar Todos" del header
+        document.getElementById('add-all-btn').addEventListener('click', addAllToCart);
+
+        processPaymentsBtn.addEventListener('click', addAllToCart);
 
         // Modal controls
         document.getElementById('detail-modal-close').addEventListener('click', () => {
@@ -1086,6 +1291,7 @@
 
         // Inicializar
         updateCartView();
+        initializeButtonStates();
     });
     </script>
 </body>
