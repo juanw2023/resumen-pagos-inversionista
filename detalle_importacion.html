@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Detalle Importación - HarmonyKicks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-alt: #161b22;
+      --card: #1e252f;
+      --border: #2d3642;
+      --text: #e6edf3;
+      --text-soft: #9da7b3;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+      --radius: 14px;
+      --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.45;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand { font-size: 1rem; font-weight: 600; letter-spacing: .5px; display:flex; gap:.5rem; align-items:center; }
+    .nav-links { display:flex; gap:1rem; flex-wrap:wrap; }
+    .nav-links a { padding:.55rem .85rem; font-size:.8rem; font-weight:500; border:1px solid transparent; border-radius: 8px; color: var(--text-soft); }
+    .nav-links a:hover { background: var(--bg-alt); color: var(--text); }
+    .nav-links a.active { background: var(--accent); color:#fff; }
+
+    main { max-width: 1220px; margin: 1.5rem auto 3rem; padding: 0 1.25rem; }
+
+    h1 { font-size: 1.6rem; margin: 0 0 1.2rem; letter-spacing:.5px; }
+    h2 { font-size: 1.1rem; margin: 2.2rem 0 0.75rem; letter-spacing:.5px; }
+
+    .intro-note { background: var(--card); border:1px solid var(--border); padding:1rem 1.1rem; border-radius: var(--radius); font-size:.85rem; color: var(--text-soft); line-height:1.5; }
+
+    .table-wrapper { background: var(--card); border:1px solid var(--border); border-radius: var(--radius); padding:1rem 1rem 0.5rem; margin-bottom:1.5rem; overflow:hidden; }
+    .table-title { font-size:.9rem; font-weight:600; margin:0 0 .75rem; letter-spacing:.5px; color: var(--text-soft); text-transform:uppercase; }
+    .scroll-x { width:100%; overflow-x:auto; }
+    table { border-collapse: collapse; width: 100%; min-width: 680px; }
+    th, td { text-align:left; padding: .65rem .7rem; font-size:.78rem; }
+    th { font-size:.7rem; font-weight:600; letter-spacing:.5px; color: var(--text-soft); background: rgba(255,255,255,0.03); position:sticky; top:0; backdrop-filter: blur(6px); }
+    tbody tr { border-top:1px solid var(--border); }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    td strong { color: var(--text); }
+
+    .section-separator { font-weight:600; background: rgba(255,255,255,0.04); color: var(--accent); }
+
+    .badge-usd { background:#1d3b5f; color:#7dc4ff; padding:2px 6px; border-radius:6px; font-size:.6rem; font-weight:600; letter-spacing:.5px; }
+    .badge-pen { background:#3b2d07; color:#f6d186; padding:2px 6px; border-radius:6px; font-size:.6rem; font-weight:600; letter-spacing:.5px; }
+
+    .totals-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin:1.25rem 0 2rem; }
+    .total-card { background: linear-gradient(145deg,#1d2430,#222b37); border:1px solid var(--border); padding:1rem 1.1rem; border-radius: var(--radius); position:relative; overflow:hidden; }
+    .total-card:before { content:""; position:absolute; inset:0; background:radial-gradient(circle at top right,rgba(59,130,246,0.18),transparent 60%); pointer-events:none; }
+    .total-label { font-size:.65rem; text-transform:uppercase; letter-spacing:.9px; font-weight:600; color: var(--text-soft); margin-bottom:.4rem; }
+    .total-amount { font-size:1.25rem; font-weight:700; letter-spacing:.5px; }
+    .total-amount span { font-size:.8rem; font-weight:600; color: var(--text-soft); margin-left:.35rem; }
+    .pending { color: var(--warning); }
+    .currency-usd { color:#7dc4ff; }
+    .currency-pen { color:#f6d186; }
+
+    .note { font-size:.7rem; color: var(--text-soft); line-height:1.5; background: var(--bg-alt); border:1px dashed var(--border); padding:.75rem .85rem; border-radius:10px; }
+
+    footer { margin:4rem 0 2rem; text-align:center; font-size:.65rem; color: var(--text-soft); }
+
+    @media (max-width: 768px) {
+      h1 { font-size:1.4rem; }
+      .navbar-inner { flex-wrap:wrap; }
+      .nav-links { width:100%; }
+      table { min-width:640px; }
+    }
+
+    @media (max-width: 520px) {
+      h1 { font-size:1.25rem; }
+      th, td { padding:.55rem .55rem; font-size:.72rem; }
+      .total-amount { font-size:1.1rem; }
+      .totals-grid { grid-template-columns: 1fr 1fr; }
+      table { min-width:620px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="brand">📦 Detalle Importación</div>
+      <div class="nav-links">
+        <a href="index.html">Resumen General</a>
+        <a href="detalle_importacion.html" class="active">Detalle Importación</a>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <h1>Detalle de Gastos de Importación</h1>
+    <div class="intro-note">
+      Desglose completo de los costos asociados a la operación de importación de HarmonyKicks E.I.R.L. en dólares americanos (USD) y soles peruanos (S/.), con referencia documental.
+    </div>
+
+    <div class="totals-grid">
+      <div class="total-card">
+        <div class="total-label">Total abonado en soles</div>
+        <div class="total-amount currency-pen">S/. 130,966.00 <span>PEN</span></div>
+      </div>
+      <div class="total-card">
+        <div class="total-label">Total gastos facturados</div>
+        <div class="total-amount currency-usd">$84,758.77 <span>USD</span></div>
+      </div>
+      <div class="total-card">
+        <div class="total-label">Pendiente en soles</div>
+        <div class="total-amount pending">S/. 3,072.90 <span>PEN</span></div>
+      </div>
+      <div class="total-card">
+        <div class="total-label">Pendiente en dólares</div>
+        <div class="total-amount pending">$9,393.76 <span>USD</span></div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <div class="table-title">Cuadro detallado de gastos</div>
+      <div class="scroll-x">
+        <table>
+          <thead>
+            <tr>
+              <th>Concepto de Gasto</th>
+              <th>Moneda</th>
+              <th>Monto</th>
+              <th>Documento de Referencia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="section-separator"><td colspan="4">I. Valor de la Mercancía (FOB)</td></tr>
+            <tr>
+              <td><strong>Valor Total de la Mercancía (Factura Comercial 4631033-74)</strong></td>
+              <td><span class="badge-usd">USD</span></td>
+              <td><strong>$71,903.04</strong></td>
+              <td>"3868_COMMERCIAL_INVOICE..." y Requerimiento de acreditación.</td>
+            </tr>
+            <tr class="section-separator"><td colspan="4">II. Flete y Seguros Internacionales</td></tr>
+            <tr>
+              <td>Flete Marítimo (OCEAN FREIGTH)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$5,705.00</td>
+              <td>"4003_F001-11762_FLETE_962.pdf"</td>
+            </tr>
+            <tr>
+              <td>Pick Up</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$420.00</td>
+              <td>"4003_F001-11762_FLETE_962.pdf"</td>
+            </tr>
+            <tr>
+              <td>Origin Charge</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$400.00</td>
+              <td>"4003_F001-11762_FLETE_962.pdf"</td>
+            </tr>
+            <tr>
+              <td>Prima de Seguro (LA6245452-0)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$254.53</td>
+              <td>"4003_F001-11763_SEGURO_962.pdf" y Certificado.</td>
+            </tr>
+            <tr class="section-separator"><td colspan="4">III. Derechos Aduaneros e Impuestos (Abonados en S/.)</td></tr>
+            <tr>
+              <td>Derechos Aduaneros (Pago inicial: Ad Valorem, IGV, IPM)</td>
+              <td><span class="badge-pen">S/.</span></td>
+              <td>S/ 108,000.00</td>
+              <td>Detalle de Pagos Realizados</td>
+            </tr>
+            <tr>
+              <td>Diferencia de Derechos (Línea de pago)</td>
+              <td><span class="badge-pen">S/.</span></td>
+              <td>S/ 16,679.00</td>
+              <td>Detalle de Pagos Realizados (Abono parcial de S/. 14,152.00)</td>
+            </tr>
+            <tr>
+              <td>Ajuste de Valor (Línea de pago)</td>
+              <td><span class="badge-pen">S/.</span></td>
+              <td>S/ 8,814.00</td>
+              <td>Detalle de Pagos Realizados (Abono completo)</td>
+            </tr>
+            <tr>
+              <td>Percepción IGV</td>
+              <td><span class="badge-pen">S/.</span></td>
+              <td>S/ 13,829.00</td>
+              <td>Constancia de Percepción O.I.: 2024/001697 (Nota: Esto pudo estar incluido en los derechos iniciales).</td>
+            </tr>
+            <tr class="section-separator"><td colspan="4">IV. Gastos Logísticos y Servicios Locales</td></tr>
+            <tr>
+              <td>Visto Bueno (VB N° M1 00196157)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$143.50</td>
+              <td>"9171_COMPROBANTE_VB.pdf"</td>
+            </tr>
+            <tr>
+              <td>Sobrestadía (Invoice N° M2 00014643)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$440.00</td>
+              <td>"9171_SOBRESTADIA_HARMONI_2.pdf"</td>
+            </tr>
+            <tr>
+              <td>Sobrestadía (Invoice N° M2 00014765)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$220.00</td>
+              <td>"9171_SOBRESTADIA_HARMONI.pdf"</td>
+            </tr>
+            <tr>
+              <td>Devolución de Contenedor (F037-494923)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$279.66</td>
+              <td>"9171_20107012011-01-F037-494923.pdf"</td>
+            </tr>
+            <tr>
+              <td>Servicio Extraordinario (F037-498628)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$94.40</td>
+              <td>"9171_COMPROBANTE_SSEE.pdf"</td>
+            </tr>
+            <tr>
+              <td><strong>Cambio de Condición / Almacenaje (F005-22292)</strong></td>
+              <td><span class="badge-usd">USD</span></td>
+              <td><strong>$2,562.45</strong></td>
+              <td>"9171_COMPROBANTE_CAMBIO_DE_CONDICION.pdf"</td>
+            </tr>
+            <tr>
+              <td>Boletín Químico</td>
+              <td><span class="badge-pen">S/.</span></td>
+              <td>S/ 656.00</td>
+              <td>Detalle de Pagos Realizados y Preliquidación</td>
+            </tr>
+            <tr>
+              <td>SCTR Salud (F002-01583813)</td>
+              <td><span class="badge-pen">S/.</span></td>
+              <td>S/ 94.40</td>
+              <td>"9171_20523470761-01-F002-01583813..."</td>
+            </tr>
+            <tr>
+              <td>SCTR Pensión (F007-000653067)</td>
+              <td><span class="badge-pen">S/.</span></td>
+              <td>S/ 88.50</td>
+              <td>"9171_ComprobantePago..."</td>
+            </tr>
+            <tr class="section-separator"><td colspan="4">V. Otros Gastos y Multas (Preliquidación/Autoliquidación)</td></tr>
+            <tr>
+              <td>Multa e Intereses N80 (Derechos Diferenciales)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$588.00</td>
+              <td>Autoliquidación L/. 2025/000146</td>
+            </tr>
+            <tr>
+              <td>Gastos Operativos (Estimado en Preliquidación)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$30.00</td>
+              <td>"9171_PRELIQUIDACION_ACTUALIZADA..."</td>
+            </tr>
+            <tr>
+              <td>Transporte (Estimado en Preliquidación)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$375.00</td>
+              <td>"9171_PRELIQUIDACION_ACTUALIZADA..."</td>
+            </tr>
+            <tr>
+              <td>Aforo/Previo (Estimado en Preliquidación)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$30.00</td>
+              <td>"9171_PRELIQUIDACION_ACTUALIZADA..."</td>
+            </tr>
+            <tr>
+              <td>Comisión (Estimado en Preliquidación)</td>
+              <td><span class="badge-usd">USD</span></td>
+              <td>$312.19</td>
+              <td>"9171_PRELIQUIDACION_ACTUALIZADA..."</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note">
+      Nota: Este cuadro refleja los montos gastados o abonados según los documentos. Existen saldos pendientes por cancelar: <strong>S/. 3,072.90</strong> y <strong>$9,393.76</strong>.
+    </div>
+
+  </main>
+  <footer>
+    HarmonyKicks E.I.R.L. • Detalle de Importación • Generado dinámicamente
+  </footer>
+</body>
+</html>

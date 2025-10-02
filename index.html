@@ -438,10 +438,6 @@
             gap: 8px;
             flex-wrap: wrap;
         }
-        .bcp-account-card .account-actions .btn-small {
-            flex: 1;
-            min-width: 80px;
-        }
         
         /* Botones del carrito */
         .cart-buttons {
@@ -790,31 +786,33 @@
             }
         }
         
-        /* iPhone 14 Pro - Carrito optimizado */
-        @media (max-width: 430px) {
+        /* Responsive layout */
+        @media (max-width: 1024px) {
             .content-wrapper { 
-                flex-direction: column;
-                gap: 16px;
+                flex-direction: column; 
             }
             aside { 
                 position: static; 
                 height: auto; 
-                margin-top: 20px;
-                padding: 0;
-            }
-            .cart-container {
-                padding: 16px;
-                border-radius: 12px;
-            }
-            .cart-items {
-                max-height: 300px;
-                overflow-y: auto;
+                margin-top: 2rem; 
             }
         }
 
-        @media (max-width: 1024px) {
-            .content-wrapper { flex-direction: column; }
-            aside { position: static; height: auto; margin-top: 40px; }
+        @media (max-width: 480px) {
+            .content-wrapper { 
+                gap: 1rem;
+            }
+            aside { 
+                margin-top: 1rem;
+                padding: 0;
+            }
+            .cart-container {
+                padding: 1rem;
+            }
+            .cart-items {
+                max-height: 250px;
+                overflow-y: auto;
+            }
         }
 
 
@@ -1013,6 +1011,10 @@
                     <svg class="icon" style="width: 18px; height: 18px;"><use href="#icon-cart"></use></svg>
                     <span>Agregar Todos</span>
                 </button>
+                <a href="detalle_importacion.html" style="display:inline-flex; align-items:center; gap:6px; background: var(--accent); color:#fff; text-decoration:none; padding:8px 14px; border-radius:10px; font-size:.75rem; font-weight:600; letter-spacing:.5px;">
+                    <span style="display:inline-block;">Detalle Importación</span>
+                    <svg class="icon" style="width:14px; height:14px;"><use href="#icon-external"></use></svg>
+                </a>
             </div>
         </div>
     </nav>
