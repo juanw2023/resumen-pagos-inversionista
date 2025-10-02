@@ -975,6 +975,9 @@
         <symbol id="icon-copy" viewBox="0 0 24 24">
             <path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
         </symbol>
+        <symbol id="icon-refresh" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M17.65 6.35A7.95 7.95 0 0 0 12 4c-4.42 0-8 3.58-8 8h2a6 6 0 0 1 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35zM6.35 17.65A7.95 7.95 0 0 0 12 20c4.42 0 8-3.58 8-8h-2a6 6 0 0 1-6 6c-1.66 0-3.14-.69-4.22-1.78L11 13H4v7l2.35-2.35z" />
+        </symbol>
         <symbol id="icon-whatsapp" viewBox="0 0 24 24">
             <path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.864 3.687"/>
         </symbol>
@@ -1007,12 +1010,8 @@
                     <span id="navbar-cart-count">0 pagos</span>
                     <span id="navbar-cart-total">$0.00</span>
                 </div>
-                <button id="navbar-add-all-btn">
-                    <svg class="icon" style="width: 18px; height: 18px;"><use href="#icon-cart"></use></svg>
-                    <span>Agregar Todos</span>
-                </button>
                 <a href="detalle_importacion.html" style="display:inline-flex; align-items:center; gap:6px; background: var(--accent); color:#fff; text-decoration:none; padding:8px 14px; border-radius:10px; font-size:.75rem; font-weight:600; letter-spacing:.5px;">
-                    <span style="display:inline-block;">Detalle Importación</span>
+                    <span style="display:inline-block;">Liquidación</span>
                     <svg class="icon" style="width:14px; height:14px;"><use href="#icon-external"></use></svg>
                 </a>
             </div>
@@ -1031,15 +1030,15 @@
             
             <div class="summary-stats">
                 <div class="stat-card">
-                    <div class="stat-number usd">$6,305.31</div>
+                    <div class="stat-number usd" id="stat-total-usd">$0.00</div>
                     <div class="stat-label">Total USD</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number pen">S/499.22</div>
+                    <div class="stat-number pen" id="stat-total-pen">S/0.00</div>
                     <div class="stat-label">Total PEN</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number count">17</div>
+                    <div class="stat-number count" id="stat-total-count">0</div>
                     <div class="stat-label">Servicios</div>
                 </div>
             </div>
@@ -1063,9 +1062,10 @@
                             <tr><td>Shopify</td><td><span class="category-badge">E-com</span></td><td class="amount usd">$50.00</td></tr>
                             <tr><td>GoDaddy</td><td><span class="category-badge">Host</span></td><td class="amount pen">S/357.98</td></tr>
                             <tr><td>Dinnet</td><td><span class="category-badge">Log</span></td><td class="amount usd">$2,364.00</td></tr>
-                            <tr><td>Grillo Jun</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$962.11</td></tr>
-                            <tr><td>Grillo Jul</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$955.80</td></tr>
-                            <tr><td>Grillo Ago</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$955.80</td></tr>
+                            <tr><td>Grillo Jun</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.11</td></tr>
+                            <tr><td>Grillo Jul</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.80</td></tr>
+                            <tr><td>Grillo Ago</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.80</td></tr>
+                            <tr><td>Grillo Sep</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.80</td></tr>
                             <tr><td>E001-2778</td><td><span class="category-badge">Cont</span></td><td class="amount usd">$118.00</td></tr>
                             <tr><td>E001-2811</td><td><span class="category-badge">Cont</span></td><td class="amount usd">$118.00</td></tr>
                             <tr><td>E001-2842</td><td><span class="category-badge">Decl</span></td><td class="amount usd">$118.00</td></tr>
@@ -1192,7 +1192,7 @@
                             <span class="space"></span>
                             <span class="pill danger">Pendiente</span>
                         </div>
-                        <p class="amount">$955.80 USD</p>
+                        <p class="amount">$1210.80 USD</p>
                         <p class="meta">Servicio de almacén correspondiente al mes de Julio 2025. Incluye detracción.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
@@ -1211,7 +1211,7 @@
                             <span class="space"></span>
                             <span class="pill danger">Pendiente</span>
                         </div>
-                        <p class="amount">$955.80 USD</p>
+                        <p class="amount">$1210.80 USD</p>
                         <p class="meta">Servicio de almacén correspondiente al mes de Agosto 2025. Incluye detracción.</p>
                         <div class="row" style="margin-top:16px;">
                             <button class="btn btn-primary add-to-cart-btn">
@@ -1407,8 +1407,9 @@
                             <span class="cart-total-amount" id="total-pen">S/ 0.00</span>
                         </div>
                         <div class="cart-buttons">
-                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" id="process-payments-btn">
-                                Agregar todos al Carrito
+                            <button class="btn btn-secondary" style="width:100%; margin-bottom:12px;" id="sync-from-summary-btn">
+                                <svg class="icon" style="width:16px; height:16px;"><use href="#icon-refresh"></use></svg>
+                                Sincronizar con Tabla
                             </button>
                             <button class="btn btn-danger" style="width: 100%;" id="clear-cart-btn">
                                 <svg class="icon" style="width: 16px; height: 16px;"><use href="#icon-remove"></use></svg>
@@ -1686,7 +1687,6 @@
         const cartSummaryEl = document.getElementById('cart-summary');
         const totalUsdEl = document.getElementById('total-usd');
         const totalPenEl = document.getElementById('total-pen');
-        const processPaymentsBtn = document.getElementById('process-payments-btn');
         const bankAccountsEl = document.getElementById('bank-accounts');
         const accountListEl = document.getElementById('account-list');
 
@@ -1892,6 +1892,8 @@
         }
 
         function updateCartView() {
+                // Recalcular totales desde cero para evitar drift
+                recalcCartTotals();
             const cartHeaderEl = document.getElementById('cart-header');
             const cartCountEl = document.getElementById('cart-count');
             const cartTotalDisplayEl = document.getElementById('cart-total-display');
@@ -1903,8 +1905,13 @@
             navbarCartCount.textContent = cart.items.length === 0 ? '0 pagos' : 
                 cart.items.length === 1 ? '1 pago' : `${cart.items.length} pagos`;
             
-            const totalGeneral = cart.totals.USD + (cart.totals.PEN / 3.8); // conversión aprox
-            navbarCartTotal.textContent = `$${totalGeneral.toFixed(2)}`;
+                // Nuevo cálculo de totales con desglose y equivalente
+                const EXCHANGE_RATE = 3.80; // TODO: hacer dinámico si es necesario
+                const totalUSD = cart.totals.USD;
+                const totalPEN = cart.totals.PEN;
+                const equivalentUSD = totalUSD + (totalPEN / EXCHANGE_RATE);
+                // Mostrar desglose claro en navbar
+                navbarCartTotal.textContent = `$${totalUSD.toFixed(2)} + S/${totalPEN.toFixed(2)}`;
             
             cartItemsEl.innerHTML = '';
             if (cart.items.length === 0) {
@@ -1919,7 +1926,13 @@
                 
                 // Actualizar header del carrito (si existe)
                 if (cartCountEl) cartCountEl.textContent = cart.items.length;
-                if (cartTotalDisplayEl) cartTotalDisplayEl.textContent = `$${totalGeneral.toFixed(2)} equiv.`;
+                if (cartTotalDisplayEl) {
+                    cartTotalDisplayEl.innerHTML = `
+                        <span style="font-weight:600; color:#7dc4ff;">USD: $${totalUSD.toFixed(2)}</span>
+                        <span style="margin-left:10px; font-weight:600; color:#f6d186;">PEN: S/${totalPEN.toFixed(2)}</span>
+                        <span style="margin-left:12px; opacity:.75; font-size:.75rem;">@${EXCHANGE_RATE.toFixed(2)} = <strong style=\"color:#93c5fd;\">$${equivalentUSD.toFixed(2)}</strong> equiv.</span>
+                    `;
+                }
 
                 // Agrupar por moneda
                 const byCurrency = cart.items.reduce((acc, item, idx) => {
@@ -1980,6 +1993,16 @@
             updateBankAccounts();
         }
 
+        function recalcCartTotals() {
+            cart.totals.USD = 0;
+            cart.totals.PEN = 0;
+            cart.items.forEach(it => {
+                const normalized = typeof it.amount === 'string' ? it.amount.replace(/[^0-9.]/g,'') : it.amount;
+                const value = parseFloat(normalized) || 0;
+                if (it.currency === 'USD') cart.totals.USD += value; else if (it.currency === 'PEN') cart.totals.PEN += value;
+            });
+        }
+
         function addToCart(item, showToastMessage = true) {
             // Verificar si el item ya está en el carrito
             if (cart.items.some(existingItem => existingItem.id === item.id)) {
@@ -1990,7 +2013,10 @@
             }
             
             cart.items.push(item);
-            cart.totals[item.currency] += parseFloat(item.amount);
+                // Normalizar número (por si llega con comas o símbolos)
+                const normalized = typeof item.amount === 'string' ? item.amount.replace(/[^0-9.]/g,'') : item.amount;
+                const value = parseFloat(normalized) || 0;
+                cart.totals[item.currency] += value;
             
             // Deshabilitar botón del item agregado
             const card = document.querySelector(`[data-id="${item.id}"]`);
@@ -2009,7 +2035,9 @@
 
         function removeFromCart(index) {
             const item = cart.items[index];
-            cart.totals[item.currency] -= parseFloat(item.amount);
+                const normalized = typeof item.amount === 'string' ? item.amount.replace(/[^0-9.]/g,'') : item.amount;
+                const value = parseFloat(normalized) || 0;
+                cart.totals[item.currency] -= value;
             cart.items.splice(index, 1);
             
             // Rehabilitar botón del item removido
@@ -2156,71 +2184,6 @@
             });
         });
 
-        // Función optimizada para agregar todos los pagos
-        function addAllToCart() {
-            const cards = document.querySelectorAll('main article.card');
-            let added = 0;
-            const itemsToAdd = [];
-            
-            // Primero, recopilar todos los items que no están en el carrito
-            cards.forEach(card => {
-                const id = card.dataset.id;
-                console.log('Procesando card con ID:', id); // Debug
-                
-                // Si ya está en el carrito, ignorar
-                if (cart.items.find(i => i.id === id)) {
-                    console.log('Item ya existe en carrito:', id); // Debug
-                    return;
-                }
-
-                const item = {
-                    id: id,
-                    name: card.dataset.name,
-                    amount: card.dataset.amount,
-                    currency: card.dataset.currency
-                };
-                
-                console.log('Item a agregar:', item); // Debug
-                itemsToAdd.push({item, card});
-            });
-
-            // Agregar todos los items de una vez
-            itemsToAdd.forEach(({item, card}) => {
-                // Verificar de nuevo antes de agregar (por si acaso)
-                if (cart.items.some(existingItem => existingItem.id === item.id)) return;
-                
-                // Agregar al carrito
-                cart.items.push(item);
-                cart.totals[item.currency] += parseFloat(item.amount);
-                
-                // Deshabilitar botón
-                const button = card.querySelector('.add-to-cart-btn');
-                if (button) {
-                    button.disabled = true;
-                    const span = button.querySelector('span');
-                    if (span) span.textContent = 'Ya agregado';
-                }
-                
-                added++;
-            });
-
-            // Actualizar vista una sola vez
-            updateCartView();
-
-            if (added > 0) {
-                showToast(`✅ ${added} pago(s) agregados al carrito`, 'success');
-                
-                // Desplazar automáticamente al carrito después de un breve delay
-                setTimeout(() => {
-                    scrollToCart();
-                }, 300);
-            } else {
-                showToast('ℹ️ Todos los pagos ya están en el carrito', 'info');
-            }
-            
-            console.log('Total items agregados:', added); // Debug
-            console.log('Items en carrito:', cart.items.length); // Debug
-        }
 
         // Función para hacer scroll al carrito
         function scrollToCart() {
@@ -2370,6 +2333,101 @@
         // Inicializar
         updateCartView();
         initializeButtonStates();
+
+        // === Cálculo de totales visibles (clase .amount) ===
+        function recalcVisibleSummaryTotals() {
+            const amountCells = document.querySelectorAll('.summary-table .amount');
+            let totalUSD = 0;
+            let totalPEN = 0;
+            amountCells.forEach(cell => {
+                const raw = cell.textContent.trim();
+                if (!raw) return;
+                // Limpiar: quitar símbolos, espacios y comas de miles
+                if (raw.startsWith('$')) {
+                    const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+                    if (!isNaN(num)) totalUSD += num;
+                } else if (raw.startsWith('S/')) {
+                    const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+                    if (!isNaN(num)) totalPEN += num;
+                }
+            });
+            // Actualizar tarjetas estadísticas
+            const statUsd = document.getElementById('stat-total-usd');
+            const statPen = document.getElementById('stat-total-pen');
+            const statCount = document.getElementById('stat-total-count');
+            if (statUsd) statUsd.textContent = `$${totalUSD.toFixed(2)}`;
+            if (statPen) statPen.textContent = `S/${totalPEN.toFixed(2)}`;
+            if (statCount) statCount.textContent = amountCells.length.toString();
+            // Insertar / actualizar contenedor de totales
+            let footerTotals = document.getElementById('summary-totals-footer');
+            if (!footerTotals) {
+                footerTotals = document.createElement('div');
+                footerTotals.id = 'summary-totals-footer';
+                footerTotals.style.marginTop = '0.75rem';
+                footerTotals.style.padding = '0.75rem 0.9rem';
+                footerTotals.style.background = 'rgba(255,255,255,0.04)';
+                footerTotals.style.border = '1px solid var(--border)';
+                footerTotals.style.borderRadius = '10px';
+                footerTotals.style.fontSize = '0.75rem';
+                const container = document.querySelector('.summary-table-container');
+                if (container) container.appendChild(footerTotals);
+            }
+            footerTotals.innerHTML = `
+                <strong style="letter-spacing:.5px; color: var(--text-soft);">Totales calculados:</strong>
+                <span style="margin-left:12px; color:#7dc4ff; font-weight:600;">USD: $${totalUSD.toFixed(2)}</span>
+                <span style="margin-left:16px; color:#f6d186; font-weight:600;">PEN: S/${totalPEN.toFixed(2)}</span>
+            `;
+        }
+
+        // Ejecutar después de render inicial
+        recalcVisibleSummaryTotals();
+        // Recalcular si en el futuro se modifica dinámicamente (ejemplo placeholder MutationObserver)
+        const summaryContainer = document.querySelector('.summary-table-container');
+        if (summaryContainer && 'MutationObserver' in window) {
+            const mo = new MutationObserver(() => {
+                recalcVisibleSummaryTotals();
+            });
+            mo.observe(summaryContainer, { childList: true, subtree: true });
+        }
+
+        // Sincronizar carrito desde la tabla resumen
+        function syncCartFromSummary() {
+            const rows = document.querySelectorAll('.summary-table tbody tr');
+            if (!rows.length) {
+                showToast('No hay filas en la tabla resumen', 'warning');
+                return;
+            }
+            let added = 0;
+            rows.forEach((tr, idx) => {
+                const amountCell = tr.querySelector('.amount');
+                if (!amountCell) return; // fila separadora
+                const serviceCell = tr.querySelector('td:first-child');
+                if (!serviceCell) return;
+                const raw = amountCell.textContent.trim();
+                const name = serviceCell.textContent.trim();
+                let currency = 'USD';
+                if (raw.startsWith('S/')) currency = 'PEN';
+                const numeric = parseFloat(raw.replace(/[^0-9.]/g,''));
+                if (isNaN(numeric)) return;
+                const id = `summary-${idx}-${currency}`;
+                // Evitar duplicados si ya existe un item con mismo nombre+moneda+monto
+                if (cart.items.some(it => it.name === name && it.currency === currency && parseFloat(it.amount) === numeric)) return;
+                cart.items.push({ id, name, amount: numeric.toFixed(2), currency });
+                added++;
+            });
+            if (added === 0) {
+                showToast('Carrito ya sincronizado', 'info');
+            } else {
+                recalcCartTotals();
+                updateCartView();
+                showToast(`Sincronizados ${added} ítems`, 'success');
+            }
+        }
+
+        const syncBtn = document.getElementById('sync-from-summary-btn');
+        if (syncBtn) {
+            syncBtn.addEventListener('click', syncCartFromSummary);
+        }
     });
     </script>
 </body>
