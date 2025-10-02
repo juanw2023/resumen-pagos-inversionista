@@ -956,6 +956,9 @@
     .account-item-details summary { list-style: none; cursor: pointer; padding: 8px 12px; color: var(--text-primary); font-weight: 700; }
     .account-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; }
     .account-item .account-info { display: flex; flex-direction: column; gap: 4px; }
+    .add-all-btn { background: var(--brand-primary); }
+    .add-all-btn:hover { background: var(--brand-primary-hover); }
+    .add-all-btn:active { transform: translateY(1px); }
     </style>
 </head>
 <body>
@@ -1010,6 +1013,10 @@
                     <span id="navbar-cart-count">0 pagos</span>
                     <span id="navbar-cart-total">$0.00</span>
                 </div>
+                <button id="navbar-add-all-btn" class="add-all-btn" style="background: var(--brand-primary); color:#fff; border:0; padding:8px 14px; border-radius:8px; font-size:.7rem; font-weight:600; letter-spacing:.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                    <svg class="icon" style="width:14px; height:14px;"><use href="#icon-refresh"></use></svg>
+                    <span>Agregar al Carrito</span>
+                </button>
                 <a href="detalle_importacion.html" style="display:inline-flex; align-items:center; gap:6px; background: var(--accent); color:#fff; text-decoration:none; padding:8px 14px; border-radius:10px; font-size:.75rem; font-weight:600; letter-spacing:.5px;">
                     <span style="display:inline-block;">Liquidación</span>
                     <svg class="icon" style="width:14px; height:14px;"><use href="#icon-external"></use></svg>
@@ -1027,6 +1034,12 @@
         <!-- Resumen Compacto -->
         <section class="summary-table-container">
             <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem;">📊 Resumen de Pagos</h3>
+            <div style="display:flex; justify-content:center; margin-bottom:.75rem;">
+                <button id="summary-add-all-btn" class="add-all-btn" style="background:var(--brand-primary); color:#fff; border:0; padding:10px 18px; border-radius:10px; font-size:.72rem; font-weight:600; letter-spacing:.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                    <svg class="icon" style="width:16px; height:16px;"><use href="#icon-refresh"></use></svg>
+                    <span>Agregar al Carrito</span>
+                </button>
+            </div>
             
             <div class="summary-stats">
                 <div class="stat-card">
@@ -1062,10 +1075,10 @@
                             <tr><td>Shopify</td><td><span class="category-badge">E-com</span></td><td class="amount usd">$50.00</td></tr>
                             <tr><td>GoDaddy</td><td><span class="category-badge">Host</span></td><td class="amount pen">S/357.98</td></tr>
                             <tr><td>Dinnet</td><td><span class="category-badge">Log</span></td><td class="amount usd">$2,364.00</td></tr>
-                            <tr><td>Grillo Jun</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.11</td></tr>
-                            <tr><td>Grillo Jul</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.80</td></tr>
-                            <tr><td>Grillo Ago</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.80</td></tr>
-                            <tr><td>Grillo Sep</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.80</td></tr>
+                            <tr><td>Almacén Jun</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.11</td></tr>
+                            <tr><td>Almacén Jul</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.80</td></tr>
+                            <tr><td>Almacén Ago</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.80</td></tr>
+                            <tr><td>Almacén Sep</td><td><span class="category-badge">Almacén</span></td><td class="amount usd">$1210.80</td></tr>
                             <tr><td>E001-2778</td><td><span class="category-badge">Cont</span></td><td class="amount usd">$118.00</td></tr>
                             <tr><td>E001-2811</td><td><span class="category-badge">Cont</span></td><td class="amount usd">$118.00</td></tr>
                             <tr><td>E001-2842</td><td><span class="category-badge">Decl</span></td><td class="amount usd">$118.00</td></tr>
@@ -1074,6 +1087,7 @@
                             <tr><td>E001-2952</td><td><span class="category-badge">Outs</span></td><td class="amount usd">$118.00</td></tr>
                             <tr><td>Mant. USD</td><td><span class="category-badge">Banco</span></td><td class="amount usd">$16.44</td></tr>
                             <tr><td>Mant. PEN</td><td><span class="category-badge">Banco</span></td><td class="amount pen">S/67.25</td></tr>
+                            <tr><td>Fotografías Producto</td><td><span class="category-badge">Media</span></td><td class="amount pen">S/2000.00</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1165,9 +1179,9 @@
                     </article>
                 </section>
 
-                <h2 class="section-title">Facturas de Logística (GRILLO)</h2>
+                <h2 class="section-title">Facturas de Logística (Almacén)</h2>
                 <section class="grid">
-                    <article class="card" data-id="grillo-1057" data-name="Factura Grillo E001-1057" data-amount="1210.68" data-currency="USD">
+                    <article class="card" data-id="Almacén-1057" data-name="Factura Almacén E001-1057" data-amount="1210.68" data-currency="USD">
                         <div class="row">
                             <h3>Factura E001-1057</h3>
                             <span class="space"></span>
@@ -1186,7 +1200,7 @@
                             </button>
                         </div>
                     </article>
-                    <article class="card" data-id="grillo-1082" data-name="Factura Grillo E001-1082" data-amount="955.80" data-currency="USD">
+                    <article class="card" data-id="Almacén-1082" data-name="Factura Almacén E001-1082" data-amount="955.80" data-currency="USD">
                         <div class="row">
                             <h3>Factura E001-1082</h3>
                             <span class="space"></span>
@@ -1205,7 +1219,7 @@
                             </button>
                         </div>
                     </article>
-                    <article class="card" data-id="grillo-1108" data-name="Factura Grillo E001-1108" data-amount="955.80" data-currency="USD">
+                    <article class="card" data-id="Almacén-1108" data-name="Factura Almacén E001-1108" data-amount="955.80" data-currency="USD">
                         <div class="row">
                             <h3>Factura E001-1108</h3>
                             <span class="space"></span>
@@ -1381,6 +1395,26 @@
                             </button>
                         </div>
                     </article>
+
+                    <article class="card" data-id="fotos-producto" data-name="Fotografías Producto" data-amount="2000.00" data-currency="PEN">
+                        <div class="row">
+                            <h3>Fotografías de Producto</h3>
+                            <span class="space"></span>
+                            <span class="pill danger">Pendiente</span>
+                        </div>
+                        <p class="amount">S/ 2,000.00</p>
+                        <p class="meta">Servicio profesional de fotografía de producto para catálogo y ecommerce.</p>
+                        <div class="row" style="margin-top:16px;">
+                            <button class="btn btn-primary add-to-cart-btn">
+                                <svg class="icon"><use href="#icon-cart"></use></svg>
+                                <span>Añadir al Carrito</span>
+                            </button>
+                            <button class="btn btn-secondary view-detail-btn" data-detail-id="fotos-producto">
+                                <svg class="icon"><use href="#icon-eye"></use></svg>
+                                <span>Ver Detalle</span>
+                            </button>
+                        </div>
+                    </article>
                 </section>
             </main>
 
@@ -1407,9 +1441,9 @@
                             <span class="cart-total-amount" id="total-pen">S/ 0.00</span>
                         </div>
                         <div class="cart-buttons">
-                            <button class="btn btn-secondary" style="width:100%; margin-bottom:12px;" id="sync-from-summary-btn">
+                            <button class="btn btn-secondary add-all-btn" style="width:100%; margin-bottom:12px;" id="side-add-all-btn">
                                 <svg class="icon" style="width:16px; height:16px;"><use href="#icon-refresh"></use></svg>
-                                Sincronizar con Tabla
+                                Agregar al Carrito
                             </button>
                             <button class="btn btn-danger" style="width: 100%;" id="clear-cart-btn">
                                 <svg class="icon" style="width: 16px; height: 16px;"><use href="#icon-remove"></use></svg>
@@ -1573,20 +1607,20 @@
                     "factura_pdf": null,
                     "descripcion": "Renovación del dominio principal y servicios de correo corporativo."
                 },
-                "grillo-1057": {
-                    "nombre": "Factura Grillo E001-1057",
+                "Almacén-1057": {
+                    "nombre": "Factura Almacén E001-1057",
                     "screenshot": null,
                     "factura_pdf": "assets/HARMONYKICKSFE001-105727-06-2025(1).pdf",
                     "descripcion": "Servicios de almacén y logística correspondientes al mes de Junio 2025."
                 },
-                "grillo-1082": {
-                    "nombre": "Factura Grillo E001-1082",
+                "Almacén-1082": {
+                    "nombre": "Factura Almacén E001-1082",
                     "screenshot": null,
                     "factura_pdf": "assets/HARMONYFE001-108224-07-2025(1).pdf",
                     "descripcion": "Servicios de almacén y logística correspondientes al mes de Julio 2025. Incluye detracción del 10%."
                 },
-                        "grillo-1108": {
-                            "nombre": "Factura Grillo E001-1108",
+                        "Almacén-1108": {
+                            "nombre": "Factura Almacén E001-1108",
                             "screenshot": null,
                             "factura_pdf": "assets/HARMONYFE001-110824-08-2025(1).pdf",
                             "descripcion": "Servicios de almacén y logística correspondientes al mes de Agosto 2025. Incluye detracción del 10%."
@@ -2212,14 +2246,7 @@
             }
         }
 
-        // Event listeners
-        document.getElementById('navbar-add-all-btn').addEventListener('click', () => {
-            addAllToCart();
-            // Siempre hacer scroll al carrito después de intentar agregar
-            setTimeout(scrollToCart, 400);
-        });
-
-        processPaymentsBtn.addEventListener('click', addAllToCart);
+    // Event listeners (limpiados de addAllToCart)
 
         document.getElementById('clear-cart-btn').addEventListener('click', clearCart);
 
@@ -2391,42 +2418,49 @@
         }
 
         // Sincronizar carrito desde la tabla resumen
-        function syncCartFromSummary() {
+        function syncCartFromSummary(options = { reset: true }) {
             const rows = document.querySelectorAll('.summary-table tbody tr');
             if (!rows.length) {
                 showToast('No hay filas en la tabla resumen', 'warning');
                 return;
             }
+            if (options.reset) {
+                cart.items = [];
+                cart.totals.USD = 0;
+                cart.totals.PEN = 0;
+            }
             let added = 0;
             rows.forEach((tr, idx) => {
                 const amountCell = tr.querySelector('.amount');
-                if (!amountCell) return; // fila separadora
+                if (!amountCell) return;
                 const serviceCell = tr.querySelector('td:first-child');
                 if (!serviceCell) return;
                 const raw = amountCell.textContent.trim();
                 const name = serviceCell.textContent.trim();
-                let currency = 'USD';
-                if (raw.startsWith('S/')) currency = 'PEN';
+                let currency = raw.startsWith('S/') ? 'PEN' : 'USD';
                 const numeric = parseFloat(raw.replace(/[^0-9.]/g,''));
                 if (isNaN(numeric)) return;
                 const id = `summary-${idx}-${currency}`;
-                // Evitar duplicados si ya existe un item con mismo nombre+moneda+monto
-                if (cart.items.some(it => it.name === name && it.currency === currency && parseFloat(it.amount) === numeric)) return;
                 cart.items.push({ id, name, amount: numeric.toFixed(2), currency });
+                if (currency === 'USD') cart.totals.USD += numeric; else cart.totals.PEN += numeric;
                 added++;
             });
-            if (added === 0) {
-                showToast('Carrito ya sincronizado', 'info');
-            } else {
-                recalcCartTotals();
-                updateCartView();
-                showToast(`Sincronizados ${added} ítems`, 'success');
-            }
+            recalcCartTotals();
+            updateCartView();
+            showToast(`Sincronizados ${added} ítems`, 'success');
         }
 
-        const syncBtn = document.getElementById('sync-from-summary-btn');
-        if (syncBtn) {
-            syncBtn.addEventListener('click', syncCartFromSummary);
+        // Botones unificados 'Agregar al Carrito'
+        const navbarAddAll = document.getElementById('navbar-add-all-btn');
+        const summaryAddAll = document.getElementById('summary-add-all-btn');
+        const sideAddAll = document.getElementById('side-add-all-btn');
+        [navbarAddAll, summaryAddAll, sideAddAll].forEach(btn => {
+            if (btn) btn.addEventListener('click', () => syncCartFromSummary({reset:true}));
+        });
+
+        // Auto-sincronizar al cargar si el carrito está vacío
+        if (cart.items.length === 0) {
+            syncCartFromSummary({reset:true});
         }
     });
     </script>
